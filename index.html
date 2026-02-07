@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TarkaScience Research Library — Official Papers & Sources</title>
+    <meta name="description" content="Official research library of TarkaScience. Download all scientific papers and sources used in our YouTube videos. 100% free and open access.">
+
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- ⭐ THIS WAS MISSING -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400&family=Poppins:wght@300;400&display=swap">
+    <link rel="icon" href="favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+
+    <meta property="og:title" content="TarkaScience Research Library">
+    <meta property="og:description" content="All papers and sources behind TarkaScience videos.">
+    <meta property="og:image" content="images/master.png">
+
+
+</head>
+
+<body class="bg-[#03040a] text-white overflow-x-hidden font-sans">
+    <!-- Scroll Progress -->
+    <div id="scrollProgress" 
+         class="fixed top-0 left-0 h-px bg-[#00eaff] z-[9999] transition-all duration-75"
+         style="width: 0%;"></div>
+    
+    <!-- Custom Cursor -->
+    <div id="customCursor" 
+         class="fixed w-8 h-8 pointer-events-none z-50 mix-blend-screen hidden lg:block">
+        <div class="w-full h-full border border-[#00eaff] rounded-full relative">
+            <div class="absolute inset-0 bg-[#00eaff] rounded-full blur-xl opacity-30"></div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav id="navbar" 
+         class="fixed top-0 left-0 right-0 z-40 bg-[#070b1f]/80 backdrop-blur-xl border-b border-[#00eaff]/10">
+        <div class="max-w-screen-2xl mx-auto px-8 py-5 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center gap-x-3">
+                <div class="w-px h-6 bg-[#00eaff]"></div>
+                <span class="font-orbitron tracking-[0.065em] text-lg uppercase text-[#00eaff] font-medium">TARKASCIENCE</span>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-11 text-sm uppercase tracking-widest">
+                <a href="#" data-page="home" class="nav-link relative text-[#b9c2ff] hover:text-[#00eaff] transition-colors active">HOME</a>
+                <a href="#" data-page="papers" class="nav-link relative text-[#b9c2ff] hover:text-[#00eaff] transition-colors">RESEARCH PAPERS</a>
+                <a href="#" data-page="team" class="nav-link relative text-[#b9c2ff] hover:text-[#00eaff] transition-colors">TEAM</a>
+                <a href="#" data-page="tools" class="nav-link relative text-[#b9c2ff] hover:text-[#00eaff] transition-colors">TOOLS</a>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <a href="https://www.youtube.com/@tarka_science" target="_blank"
+                   class="hidden sm:inline-flex items-center px-5 py-2 text-xs tracking-[0.065em] font-medium bg-transparent border border-[#00eaff] hover:bg-[#00eaff] hover:text-[#03040a] transition-all rounded-full">
+                    WATCH ON YOUTUBE
+                </a>
+                
+                <!-- Hamburger -->
+                <button id="mobileToggle"
+                    class="md:hidden w-9 h-9 flex items-center justify-center text-[#00eaff]">
+                    <svg id="hamburgerIcon" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" 
+         class="hidden md:hidden fixed top-[73px] left-0 right-0 bg-[#070b1f]/95 backdrop-blur-xl z-30 border-b border-[#00eaff]/10 py-6">
+        <div class="flex flex-col items-center gap-6 text-sm uppercase tracking-[0.065em]">
+            <a href="#" data-page="home" class="nav-link-mobile text-[#b9c2ff] hover:text-[#00eaff]">HOME</a>
+            <a href="#" data-page="papers" class="nav-link-mobile text-[#b9c2ff] hover:text-[#00eaff]">RESEARCH PAPERS</a>
+            <a href="#" data-page="team" class="nav-link-mobile text-[#b9c2ff] hover:text-[#00eaff]">TEAM</a>
+            <a href="#" data-page="tools" class="nav-link-mobile text-[#b9c2ff] hover:text-[#00eaff]">TOOLS</a>
+            
+            <a href="https://www.youtube.com/@tarka_science" target="_blank"
+               class="mt-4 px-8 py-3 text-xs bg-[#00eaff] text-[#03040a] font-medium rounded-full">WATCH ON YOUTUBE →</a>
+        </div>
+    </div>
+
+    <!-- CANVAS BACKGROUND -->
+    <canvas 
+        id="bgCanvas" 
+        class="fixed inset-0 z-[-1] pointer-events-none"
+        width="1920" 
+        height="1080"></canvas>
+
+    <!-- HERO -->
+    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+
+    <!-- 3D Scholar Scene -->
+    <div id="scholar3D"
+         class="absolute right-0 top-0 w-1/2 h-full hidden lg:block pointer-events-auto z-0">
+    </div>
+
+    <!-- Aurora overlay (KEEP ONLY ONE) -->
+    <div id="auroraOverlay"
+         class="absolute inset-0 bg-gradient-to-t from-[#03040a] via-[#1a2345] to-transparent z-[-1] opacity-70"></div>
+
+        <div class="relative z-10 text-center lg:text-left px-6 max-w-6xl mx-auto lg:mr-auto lg:ml-16">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 mb-4 text-xs tracking-[0.065em] text-[#7a6bff] border border-[#7a6bff]/30 rounded-full px-6 py-2">
+                <span class="inline-block h-px w-6 bg-[#7a6bff]"></span> WELCOME TO
+            </div>
+            
+            <!-- Main title -->
+            <h1 class="font-orbitron text-[7.5rem] md:text-[9rem] leading-[0.75] tracking-[-0.01em] mb-3 text-transparent bg-clip-text bg-gradient-to-b from-white via-[#b9c2ff] to-[#5bbcff]">
+                TARKA<br><span class="text-[#00eaff]">SCIENCE</span>
+            </h1>
+            
+            <p class="font-light text-[#b9c2ff] text-base md:text-lg tracking-[0.065em] mb-8">RESEARCH LIBRARY</p>
+            
+            <p class="max-w-md mx-auto text-sm md:text-base text-[#8894cc] mb-10 leading-relaxed">
+                Every citation. Every dataset.<br>Behind every TarkaScience video.
+            </p>
+            
+            <!-- CTA -->
+            <button onclick="switchPage('papers')" 
+                id="heroCTA"
+                class="group relative px-10 py-4 bg-transparent border border-[#00eaff] text-[#00eaff] rounded-xl overflow-hidden font-medium text-sm tracking-widest transition-all hover:border-[#7a6bff]">
+                <span class="relative z-10 flex items-center gap-3">
+                    EXPLORE RESEARCH NOTES 
+                    <span class="inline-block transition-transform group-hover:rotate-45">→</span>
+                </span>
+                <!-- Button shine -->
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+            </button>
+        </div>
+        
+        <!-- Scroll prompt -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+            <div class="text-[10px] tracking-[0.065em] text-[#5bbcff] mb-1">SCROLL TO ENTER ARCHIVE</div>
+            <div class="h-px w-7 bg-[#00eaff]/50"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-9 stroke-[#00eaff]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 14l-9-9m0 0L5 10" />
+            </svg>
+        </div>
+    </section>
+    
+    <!-- WHY WE EXIST -->
+    <section id="why-section" class="py-20 md:py-28 relative">
+        <div class="max-w-screen-2xl mx-auto px-6 lg:px-16">
+            <!-- Header -->
+            <div class="flex flex-col items-center text-center mb-16">
+                <div class="inline-flex items-center text-xs uppercase tracking-[0.065em] text-[#00eaff] mb-3">
+                    — HELLO —
+                </div>
+                <h2 class="font-orbitron text-5xl md:text-6xl tracking-[-0.005em] leading-none mb-3">WHY THIS LIBRARY EXISTS</h2>
+                <div class="h-px w-16 bg-[#00eaff]"></div>
+            </div>
+            
+            <!-- Cards grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-7 lg:gap-8" id="whyCards">
+                <!-- Filled by JS -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- PAPERS SECTION -->
+    <section id="papers" class="bg-[#070b1f] py-16 md:py-24">
+        <!-- Top bar -->
+        <div class="sticky top-[73px] z-30 bg-[#070b1f]/90 backdrop-blur-lg border-b border-[#00eaff]/10">
+            <div class="max-w-screen-2xl mx-auto px-6 lg:px-16 py-4 flex items-center justify-between">
+                <div>
+                    <span class="font-orbitron text-xs tracking-[0.065em] text-[#00eaff]">ARCHIVE • 15 PAPERS • 128GB</span>
+                </div>
+                
+                <div class="flex items-center gap-2 text-xs uppercase">
+                    <button onclick="filterCategory('all')" id="cat-all"
+                        class="category-btn active px-4 py-1 border-b-2 border-[#00eaff] text-[#00eaff]">ALL</button>
+                    <button onclick="filterCategory('Universe')" id="cat-Universe"
+                        class="category-btn px-4 py-1 text-[#8894cc] hover:text-[#b9c2ff]">COSMOLOGY</button>
+                    <button onclick="filterCategory('Physics')" id="cat-Physics"
+                        class="category-btn px-4 py-1 text-[#8894cc] hover:text-[#b9c2ff]">PHYSICS</button>
+                    <button onclick="filterCategory('exo')" id="cat-exo"
+                        class="category-btn px-4 py-1 text-[#8894cc] hover:text-[#b9c2ff]">EXOPLANET</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="max-w-screen-2xl mx-auto px-6 lg:px-16">
+            <!-- Section header -->
+            <div class="pt-12 pb-8">
+                <div class="inline-block mb-2">
+                    <span class="bg-[#00eaff]/10 text-[#00eaff] text-xs font-mono tracking-[0.065em] px-5 py-px">DATASTREAM ACTIVE</span>
+                </div>
+                <h2 class="font-orbitron text-[4.75rem] leading-none tracking-[-0.01em] mb-2">Research Papers</h2>
+                <p class="text-[#8894cc] text-sm">Peer-reviewed sources • Open access • Last sync: 11 minutes ago</p>
+            </div>
+            
+            <!-- Papers grid -->
+            <div id="papersGrid" 
+                 class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12">
+                <!-- Populated by JS -->
+            </div>
+            
+            <!-- Load more -->
+            <div class="flex justify-center">
+                <button onclick="fakeLoadMore()" id="loadMoreBtn"
+                    class="px-7 py-3 text-xs border border-[#7a6bff]/50 hover:border-[#7a6bff] transition-colors rounded-full flex items-center gap-3 text-[#7a6bff]">
+                    <span>LOAD MORE FROM THE DEEP ARCHIVE</span>
+                    <span class="inline-block w-px h-3 bg-[#7a6bff]"></span><span class="text-xs">↓</span>
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- TEAM SECTION -->
+    <section id="team" class="py-20 md:py-28 relative overflow-hidden">
+        <!-- Background accent shapes -->
+        <div class="absolute inset-0 pointer-events-none">
+            <!-- Neon ring -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[520px] border border-[#00eaff]/10 rounded-full"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] border border-[#7a6bff]/10 rounded-full"></div>
+        </div>
+        
+        <div class="max-w-screen-2xl mx-auto px-6 lg:px-16">
+            <!-- Header -->
+            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-12 lg:mb-16">
+                <div>
+                    <span class="inline-flex items-center uppercase text-xs tracking-[0.065em] text-[#7a6bff]">
+                        <span class="block h-px bg-[#7a6bff] w-6 mr-3"></span>CREATOR
+                    </span>
+                    <h2 class="font-orbitron text-[4.75rem] leading-none tracking-[-0.005em]">The Mind Behind</h2>
+                </div>
+                
+                <div class="mt-3 lg:mt-0 text-sm text-[#8894cc] max-w-[260px]">
+                    One researcher.<br>Zero gatekeepers.<br>Absolute transparency.
+                </div>
+            </div>
+            
+            <!-- Master profile -->
+            <div class="relative mx-auto max-w-4xl">
+                <!-- Glass card -->
+                <div id="masterCard"
+                     class="bg-[#0a1030]/80 backdrop-blur-3xl border border-[#00eaff]/30 rounded-3xl overflow-hidden shadow-[0_0_60px_-10px] shadow-[#00eaff]">
+                    
+                    <!-- Avatar header -->
+                    <div class="h-56 bg-black relative flex items-center justify-center overflow-hidden">
+                        <!-- Aurora strip -->
+                        <div class="absolute inset-0 bg-[linear-gradient(90deg,#00eaff_20%,transparent_40%,#7a6bff_60%,transparent_80%)] opacity-40"></div>
+                        
+                        <!-- Avatar -->
+                        <div class="relative z-10 w-32 h-32 rounded-full border-[6px] border-[#00eaff] overflow-hidden shadow-[0_0_40px_#00eaff]">
+                            <!-- Placeholder image -->
+                            <img id="masterAvatar" 
+                            src="images/master.png" 
+                            alt="MASTER"
+                            class="w-full h-full object-cover grayscale-[0.15]">
+
+                            
+                            <!-- Neon ring overlay -->
+                            <div class="absolute inset-0 border border-[#00eaff] rounded-full scale-110 opacity-50"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="px-8 pb-8 pt-6 lg:px-12 lg:pb-10">
+                        <!-- Name & title -->
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mb-7">
+                            <div>
+                                <div class="font-orbitron text-[#00eaff] text-xl tracking-[0.065em] leading-none">MASTER</div>
+                                <div class="text-xs text-[#8894cc] tracking-widest">Founder of TarkaScience</div>
+                            </div>
+                            <div class="hidden sm:block h-px flex-1 bg-[#00eaff]/30"></div>
+                            <div class="bg-[#00eaff]/10 text-[#00eaff] text-[11px] px-4 py-px rounded-full font-mono tracking-widest self-start sm:self-center">ID: TS-001</div>
+                        </div>
+                        
+                        <!-- Mission -->
+                        <div class="mb-7">
+                            <div class="uppercase text-[#7a6bff] text-xs tracking-[0.065em] mb-1">MISSION LOG 0041</div>
+                            <p class="text-[#b9c2ff] leading-relaxed text-[15px]">
+                                TarkaScience is a science education platform dedicated to
+explaining the mysteries of the universe in simple language.
+
+Every video is backed by deep research and scientific sources.
+This library provides open access to those research materials.
+<br>
+                                Every paper I cite on TarkaScience is here — fully downloadable, annotated, and forever free.
+                            </p>
+                        </div>
+                        
+                        <!-- Stats row -->
+                        <div class="grid grid-cols-3 gap-6 border-t border-[#00eaff]/10 pt-6">
+                            <div>
+                                <div class="text-xs text-[#8894cc] tracking-widest">PAPERS CURATED</div>
+                                <div class="font-orbitron text-3xl text-[#00eaff] tracking-tighter">52</div>
+                            </div>
+                            <div>
+                                <div class="text-xs text-[#8894cc] tracking-widest">VIDEOS SUPPORTED</div>
+                                <div class="font-orbitron text-3xl text-[#00eaff] tracking-tighter">18</div>
+                            </div>
+                            <div>
+                                <div class="text-xs text-[#8894cc] tracking-widest">CITATIONS</div>
+                                <div class="font-orbitron text-3xl text-[#00eaff] tracking-tighter">240+</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Vision -->
+                        <div class="mt-10 pt-8 border-t border-[#00eaff]/10">
+                            <div class="uppercase text-xs text-[#7a6bff] tracking-[0.065em] mb-2">Future Horizon</div>
+                            <div class="flex flex-wrap gap-x-7 gap-y-1 text-xs text-[#b9c2ff]">
+
+                                <span class="flex items-center gap-2">
+                                    <span class="inline-block h-px bg-[#00eaff] w-4"></span>
+                                    Cosmology (Current Research)
+                                </span>
+
+                                <span class="flex items-center gap-2">
+                                    <span class="inline-block h-px bg-[#00eaff] w-4"></span>
+                                    Quantum Mechanics
+                                </span>
+
+                                <span class="flex items-center gap-2">
+                                    <span class="inline-block h-px bg-[#00eaff] w-4"></span>
+                                    Deep Sea Mysteries
+                                </span>
+
+                                <span class="flex items-center gap-2">
+                                    <span class="inline-block h-px bg-[#00eaff] w-4"></span>
+                                    Physics Mysteries
+                                </span>
+
+                                <span class="flex items-center gap-2">
+                                    <span class="inline-block h-px bg-[#00eaff] w-4"></span>
+                                    Classical Physics
+                                </span>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- TOOLS SECTION -->
+    <section id="tools" class="bg-[#03040a] py-16 md:py-24">
+        <div class="max-w-screen-2xl mx-auto px-6 lg:px-16">
+            <!-- Header -->
+            <div class="text-center mb-12">
+                <span class="inline-flex bg-[#7a6bff]/10 text-[#7a6bff] text-xs font-mono py-px px-5 rounded-full mb-4 tracking-widest">FIELD INSTRUMENTS</span>
+                <h2 class="font-orbitron text-[4.75rem] leading-[1.05] tracking-[-0.01em]">Laboratory Tools</h2>
+                <p class="text-[#8894cc]">Real-time instruments used by TarkaScience</p>
+            </div>
+            
+            <!-- Tools grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                
+                <!-- Digital Atomic Clock -->
+                <div class="bg-[#0a1030]/80 border border-[#00eaff]/30 rounded-3xl overflow-hidden h-full flex flex-col">
+                    <!-- Clock header -->
+                    <div class="bg-[#00eaff]/5 px-7 py-4 flex items-center justify-between border-b border-[#00eaff]/10">
+                        <span class="uppercase font-mono text-xs tracking-[0.065em] text-[#00eaff]">UTC • TARKA_SCIENCE</span>
+                        <span class="h-px w-6 bg-[#00eaff]"></span>
+                        <span class="uppercase text-[10px] text-[#8894cc] font-medium">Atomic Reference</span>
+                    </div>
+                    
+                    <!-- Clock display -->
+                    <div class="flex-1 flex items-center justify-center py-12 px-6">
+                        <div id="digitalClock" 
+                             class="font-mono font-medium text-[#00eaff] text-[5.75rem] md:text-[7rem] tracking-[-0.02em] leading-none tabular-nums text-center">
+                            23:14:37
+                        </div>
+                    </div>
+                    
+                    <div class="bg-[#070b1f] text-[11px] text-center py-3 text-[#5bbcff] font-mono text-xs tracking-widest border-t border-[#00eaff]/10">
+                        SYNCHRONIZED • 0.0003s drift
+                    </div>
+                </div>
+                
+                <!-- Stopwatch -->
+                <div class="bg-[#0a1030]/80 border border-[#7a6bff]/30 rounded-3xl flex flex-col overflow-hidden">
+                    <!-- Stopwatch header -->
+                    <div class="bg-[#7a6bff]/5 px-7 py-4 flex items-center justify-between border-b border-[#7a6bff]/10">
+                        <span class="uppercase font-mono text-xs tracking-[0.065em] text-[#7a6bff]">STOPWATCH • EXPERIMENT TIMER</span>
+                    </div>
+                    
+                    <!-- Main display -->
+                    <div class="flex-1 flex flex-col items-center justify-center py-6 px-7">
+                        <div id="stopwatchDisplay" 
+                             class="font-mono text-[#7a6bff] text-[4.25rem] tracking-[0.035em] tabular-nums mb-2 leading-none">
+                            00:00.00
+                        </div>
+                        
+                        <!-- Lap display -->
+                        <div id="lapContainer" class="h-28 overflow-auto text-[13px] font-mono w-full text-[#8894cc] text-right pr-1 mb-4 scrollbar-hide">
+                            <!-- JS populated laps -->
+                        </div>
+                    </div>
+                    
+                    <!-- Controls -->
+                    <div class="grid grid-cols-3 border-t border-[#7a6bff]/10 bg-[#070b1f]">
+                        <button onclick="toggleStopwatch()" id="stopwatchStartBtn"
+                            class="py-5 text-xs uppercase font-medium text-[#7a6bff] hover:bg-[#7a6bff]/10 transition-colors">START</button>
+                        <button onclick="resetStopwatch()" id="stopwatchResetBtn"
+                            class="py-5 text-xs uppercase font-medium border-x border-[#7a6bff]/10 text-[#5bbcff] hover:bg-[#7a6bff]/5 transition-colors">RESET</button>
+                        <button onclick="recordLap()" id="lapBtn"
+                            class="py-5 text-xs uppercase font-medium text-[#7a6bff] hover:bg-[#7a6bff]/10 transition-colors disabled:opacity-30" disabled>LAP</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional note -->
+            <div class="mt-12 text-center">
+                <p class="text-xs text-[#5bbcff] font-mono tracking-widest">THANK YOU FOR VISITING THE SITE</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Banner -->
+    <section class="relative py-16 bg-[#00eaff]">
+        <div class="max-w-screen-2xl mx-auto px-6 lg:px-16">
+            <div class="bg-[#03040a] rounded-3xl py-14 px-8 lg:px-14 flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div>
+                    <span class="font-orbitron text-[#00eaff] text-xl tracking-[0.065em] block">Still watching the videos?</span>
+                    <span class="text-white/90 text-sm">Go deeper. Read the sources.</span>
+                </div>
+                
+                <a href="https://www.youtube.com/@tarka_science" target="_blank"
+                   class="bg-[#00eaff] hover:bg-white text-[#03040a] font-semibold text-sm uppercase tracking-widest px-9 py-4 rounded-xl transition-colors flex-shrink-0 flex items-center gap-4 group">
+                    SUBSCRIBE &amp; SUPPORT TARKA SCIENCE
+                    <span class="block transition-transform group-hover:translate-x-1">→</span>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FOOTER -->
+    <footer class="bg-black py-14 border-t border-[#00eaff]/10">
+        <div class="max-w-screen-2xl mx-auto px-6 lg:px-16">
+            <div class="flex flex-col md:flex-row items-center justify-between text-xs text-[#5a678f]">
+                <div class="flex items-center gap-3 mb-5 md:mb-0">
+                    <span class="font-orbitron text-[#00eaff] text-sm">TARKASCIENCE</span> 
+                    <span class="text-[11px] tracking-widest">RESEARCH ARCHIVES v4.1</span>
+                </div>
+                
+                <div class="font-mono text-xs">© <span id="year"></span> TarkaScience — Educational use. All papers belong to their respective authors. All papers are public domain or CC-BY 4.0.</div>
+                
+                <div class="flex gap-6 text-xs mt-5 md:mt-0">
+                    <a href="privacy.html" class="hover:text-[#00eaff] transition-colors">PRIVACY OF DATA</a>
+                    <a href="signal.html" class="hover:text-[#00eaff] transition-colors">SIGNAL LOG</a>
+                    <a href="https://www.facebook.com/profile.php?id=61587182564777" target="_blank" class="hover:text-[#00eaff] transition-colors">FACEBOOK</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tailwind script already injected via CDN
+        
+        // Sample paper data
+        let allPapers = [
+            {
+                id: 1,
+                title: "Galaxy formation",
+                desc: "Galaxies formed from the gravitational collapse of gas, dust, and dark matter following the Big Bang, starting within denser regions of the early universe. Small clumps merged over billions of years to form larger structures, with supermassive black holes potentially playing a key role in their development. ",
+                date: "2026.02.07",
+                category: "Universe",
+                file: "papers/Galaxy_formation.pdf",
+                image: "thumbnails/galaxy_formation.png",
+                readTime: "60 min"
+            },
+            {
+                id: 2,
+                title: "Light Bending",
+                desc: "Black holes bend light by severely warping the fabric of spacetime due to their intense gravity, a phenomenon known as gravitational lensing. As light passes near a black hole, its path curves, creating distorted, magnified, or multiple images of background objects. Light passing too close gets trapped, forming a dark event horizon. ",
+                date: "2026.02.07",
+                category: "Universe",
+                file: "papers/Light_bending.pdf",
+                image: "thumbnails/light_bending.png",
+                readTime: "60 min"
+            },
+            {
+                id: 3,
+                title: "The Expanding Cosmos",
+                desc: "The universe is undergoing continuous expansion, a fundamental aspect of Big Bang cosmology initiated 13.8 billion years ago. Rather than moving through space, galaxies are carried further apart as the fabric of space itself stretches. Observations indicate this expansion is accelerating, driven by a mysterious force known as dark energy. ",
+                date: "2026.02.07",
+                category: "Universe",
+                file: "papers/The_Expanding_Cosmos.pdf",
+                image: "thumbnails/Expanding_Universe.png",
+                readTime: "60 min"
+            }
+        ];
+        
+        let displayedPapers = 3;
+        const PAPERS_PER_LOAD = 3;
+
+        
+        // Variables for stopwatch
+        let stopwatchInterval = null;
+        let stopwatchTime = 0;
+        let isRunning = false;
+        let laps = [];
+        
+        // Canvas variables
+        let canvas, ctx;
+        let particles = [];
+        let auroraPoints = [];
+        
+        // Fake tilt class
+        class CardTilt {
+            constructor(element) {
+                this.element = element;
+                this.init();
+            }
+            
+            init() {
+                this.element.addEventListener("mousemove", (e) => this.handleMove(e));
+                this.element.addEventListener("mouseleave", () => this.reset());
+                this.element.style.transition = "transform 80ms linear";
+            }
+            
+            handleMove(e) {
+                const rect = this.element.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                
+                const rotateY = ((e.clientX - centerX) / (rect.width / 2)) * 14;
+                const rotateX = ((centerY - e.clientY) / (rect.height / 2)) * 14;
+                
+                this.element.style.transform = 
+                    `perspective(820px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03,1.03,1.03)`;
+            }
+            
+            reset() {
+                this.element.style.transform = 
+                    `perspective(820px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)`;
+            }
+        }
+        
+        // Generate star particles
+        class Star {
+            constructor() {
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
+                this.radius = Math.random() * 1.8 + 0.6;
+                this.alpha = Math.random();
+                this.speed = Math.random() * 0.018 + 0.006;
+            }
+            
+            update() {
+                this.alpha += this.speed;
+                if (this.alpha >= 1 || this.alpha <= 0.2) this.speed *= -1;
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = "#e0f0ff";
+                
+                ctx.shadowColor = "#a0d8ff";
+                ctx.shadowBlur = 12;
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Cross glow for brightest stars
+                if (this.radius > 1.6) {
+                    ctx.strokeStyle = "#e0f0ff";
+                    ctx.lineWidth = 0.7;
+                    ctx.beginPath();
+                    ctx.moveTo(this.x - 6, this.y);
+                    ctx.lineTo(this.x + 6, this.y);
+                    ctx.moveTo(this.x, this.y - 6);
+                    ctx.lineTo(this.x, this.y + 6);
+                    ctx.stroke();
+                }
+                ctx.restore();
+            }
+        }
+        
+        // Aurora wave generator
+        function generateAurora() {
+            auroraPoints = [];
+            const segments = 42;
+            for (let i = 0; i <= segments; i++) {
+                auroraPoints.push({
+                    x: (i / segments) * window.innerWidth,
+                    offset: Math.random() * 120,
+                    speed: 0.012 + Math.random() * 0.011
+                });
+            }
+        }
+        
+        // Draw aurora
+        function drawAurora() {
+            const time = Date.now() / 900;
+            
+            ctx.save();
+            
+            // First aurora band - cyan
+            ctx.beginPath();
+            ctx.strokeStyle = "rgba(0, 234, 255, 0.32)";
+            ctx.lineWidth = 68;
+            
+            ctx.shadowColor = "#00eaff";
+            ctx.shadowBlur = 18;
+            
+            ctx.moveTo(0, 210);
+            for (let i = 0; i < auroraPoints.length; i++) {
+                const p = auroraPoints[i];
+                const y = 190 + Math.sin(time * p.speed + i) * 38 + Math.cos(time * 0.3 + i * 0.4) * 22;
+                ctx.lineTo(p.x, y);
+            }
+            ctx.stroke();
+            
+            // Second band - purple
+            ctx.beginPath();
+            ctx.strokeStyle = "rgba(122, 106, 255, 0.25)";
+            ctx.lineWidth = 42;
+            ctx.shadowColor = "#7a6bff";
+            ctx.shadowBlur = 14;
+            
+            ctx.moveTo(0, 260);
+            for (let i = 0; i < auroraPoints.length; i++) {
+                const p = auroraPoints[i];
+                const y = 245 + Math.sin(time * p.speed * 1.3 + i * 1.6) * 32;
+                ctx.lineTo(p.x, y);
+            }
+            ctx.stroke();
+            
+            ctx.restore();
+        }
+        
+        // Render canvas
+        let lastFrameTime = 0;
+        const FPS = 30;
+        const frameDelay = 1000 / FPS;
+
+        function animateCanvas(timestamp = 0) {
+            if (timestamp - lastFrameTime < frameDelay) {
+                requestAnimationFrame(animateCanvas);
+                return;
+            }
+            lastFrameTime = timestamp;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(star => {
+                star.update();
+                star.draw();
+            });
+
+            drawAurora();
+
+            requestAnimationFrame(animateCanvas);
+        }
+
+        
+        // Resize canvas
+        function resizeCanvas() {
+            const scale = window.devicePixelRatio > 1 ? 0.8 : 1;
+            canvas.width = window.innerWidth * scale;
+            canvas.height = window.innerHeight * scale;
+            ctx.scale(scale, scale);
+
+            
+            // Re-create stars to match new dimensions
+            particles = [];
+            for (let i = 0; i < 210; i++) {
+                particles.push(new Star());
+            }
+            
+            generateAurora();
+        }
+        
+        // Render all paper cards
+        function renderPapers(papers) {
+            let html = "";
+            
+            papers.forEach(paper => {
+                html += `
+                    <div data-id="${paper.id}" class="paper-card group bg-[#0a1030] border border-[#00eaff]/10 rounded-3xl overflow-hidden hover:border-[#00eaff] transition-all duration-300 flex flex-col h-full">
+                        <!-- Thumbnail -->
+                        <div class="relative h-56 overflow-hidden">
+                            <img src="${paper.image}" 
+                                 alt="${paper.title}"
+                                 class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                            
+                            <!-- Overlay glow -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#03040a] via-[#03040a]/70 to-transparent"></div>
+                            
+                            <!-- Category badge -->
+                            <div class="absolute top-4 left-4 bg-[#00eaff]/90 text-[#03040a] text-[10px] font-mono tracking-widest px-3 py-px rounded-full uppercase text-xs">
+                                ${paper.category}
+                            </div>
+                        </div>
+                        
+                        <!-- Body -->
+                        <div class="flex-1 flex flex-col px-5 py-5">
+                            <div class="font-orbitron text-xs tracking-[0.065em] text-[#5bbcff] mb-1">${paper.date}</div>
+                            <h4 class="font-orbitron leading-tight text-[1.07rem] mb-3 line-clamp-2 group-hover:text-[#00eaff] transition-colors">${paper.title}</h4>
+                            
+                            <p class="text-xs text-[#8894cc] leading-relaxed flex-1">${paper.desc}</p>
+                            
+                            <div class="mt-6 flex items-center justify-between">
+                                <span class="uppercase text-[10px] font-medium text-[#7a6bff]">${paper.readTime}</span>
+                                
+                                <button onclick="downloadPaper(${paper.id})" 
+                                    class="bg-[#00eaff] text-[#03040a] hover:bg-[#7a6bff] hover:text-white transition-all px-5 py-px text-xs rounded-full flex items-center gap-2 text-[11px] font-semibold">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M4 16v-4m0 0l4 4m-4-4l4-4m12 4v4m0-4l-4-4m4 4l-4 4" />
+                                    </svg> PDF
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById("papersGrid").innerHTML = html;
+            
+            // Attach tilt to newly created cards
+            document.querySelectorAll(".paper-card").forEach(card => {
+                new CardTilt(card);
+            });
+        }
+        
+        // Download handler (fake)
+        function downloadPaper(id) {
+            const paper = allPapers.find(p => p.id === id);
+            if (!paper || !paper.file) return;
+
+            window.open(paper.file, "_blank");
+        }
+
+        
+        // Filter papers by category
+        function filterCategory(cat) {
+            document.querySelectorAll(".category-btn").forEach(btn => {
+                if ((cat === "all" && btn.id === "cat-all") || btn.id === "cat-" + cat) {
+                    btn.classList.add("active", "border-b-2", "border-[#00eaff]", "text-[#00eaff]");
+                } else {
+                    btn.classList.remove("active", "border-b-2", "border-[#00eaff]", "text-[#00eaff]");
+                }
+            });
+            
+            let filtered;
+            
+            if (cat === "all") {
+                filtered = allPapers;
+            } else {
+                filtered = allPapers.filter(p => 
+                    p.category.toLowerCase() === cat.toLowerCase()
+                );
+            }
+
+            displayedPapers = filtered.length;
+            renderPapers(filtered);
+        }
+        
+        //load more
+        function fakeLoadMore() {
+
+        const btn = document.getElementById("loadMoreBtn");
+
+        // Increase how many papers should be visible
+        displayedPapers += PAPERS_PER_LOAD;
+
+        // Slice only the needed papers
+        const papersToShow = allPapers.slice(0, displayedPapers);
+
+        // Render without duplicates
+        renderPapers(papersToShow);
+
+        // If all papers are shown → hide button
+        if (displayedPapers >= allPapers.length) {
+            btn.textContent = "✓ All papers loaded";
+            setTimeout(() => {
+                btn.style.display = "none";
+            }, 800);
+        }
+    }
+
+        
+        // Render "Why this exists" cards
+        function renderWhyCards() {
+            const cardsHTML = `
+                <!-- Card 1 -->
+                <div id="why-card-1" class="glass-card bg-[#0f182f]/70 border border-[#00eaff]/30 rounded-3xl p-7 pb-9 h-full flex flex-col transition-all hover:border-[#00eaff]">
+                    <div class="mb-6 h-px w-6 bg-[#00eaff]"></div>
+                    <div class="font-orbitron text-[#00eaff] text-xl mb-1 tracking-widest">01</div>
+                    <h4 class="font-orbitron text-xl tracking-[-0.005em] mb-4">Transparency</h4>
+                    <p class="text-[#8894cc] text-sm leading-relaxed flex-1">Nothing is hidden behind paywalls or “supplementary material” links. Every number, graph, and dataset used in the videos is here.</p>
+                    
+                    <div class="mt-auto text-[11px] text-[#5bbcff] font-mono pt-6 border-t border-[#00eaff]/10">52 verified sources</div>
+                </div>
+                
+                <!-- Card 2 -->
+                <div id="why-card-2" class="glass-card bg-[#0f182f]/70 border border-[#7a6bff]/30 rounded-3xl p-7 pb-9 h-full flex flex-col transition-all hover:border-[#7a6bff]">
+                    <div class="mb-6 h-px w-6 bg-[#7a6bff]"></div>
+                    <div class="font-orbitron text-[#7a6bff] text-xl mb-1 tracking-widest">02</div>
+                    <h4 class="font-orbitron text-xl tracking-[-0.005em] mb-4">Curiosity Engine</h4>
+                    <p class="text-[#8894cc] text-sm leading-relaxed flex-1">This library is not an afterthought. It is the reason the channel exists. We find the paper first — then film the story.</p>
+                    
+                    <div class="mt-auto text-[11px] text-[#5bbcff] font-mono pt-6 border-t border-[#7a6bff]/10">15 stories • 0 filler</div>
+                </div>
+                
+                <!-- Card 3 -->
+                <div id="why-card-3" class="glass-card bg-[#0f182f]/70 border border-[#00eaff]/30 rounded-3xl p-7 pb-9 h-full flex flex-col transition-all hover:border-[#00eaff]">
+                    <div class="mb-6 h-px w-6 bg-[#00eaff]"></div>
+                    <div class="font-orbitron text-[#00eaff] text-xl mb-1 tracking-widest">03</div>
+                    <h4 class="font-orbitron text-xl tracking-[-0.005em] mb-4">Free Forever</h4>
+                    <p class="text-[#8894cc] text-sm leading-relaxed flex-1">No login. No newsletter. No “unlock full PDF”. Download anything, annotate, share, fork — it belongs to humanity now.</p>
+                    
+                    <div class="mt-auto text-xs bg-[#00eaff]/10 text-[#00eaff] font-medium inline-block px-4 py-px rounded mt-6">CC-BY + PD</div>
+                </div>
+            `;
+            
+            document.getElementById("whyCards").innerHTML = cardsHTML;
+            
+            // Attach tilt to why cards too
+            document.querySelectorAll(".glass-card").forEach(card => {
+                new CardTilt(card);
+            });
+        }
+        
+        // Live clock
+        function updateClock() {
+            setInterval(() => {
+                const date = new Date();
+                
+                let hours = date.getUTCHours().toString().padStart(2, "0");
+                let minutes = date.getUTCMinutes().toString().padStart(2, "0");
+                let seconds = date.getUTCSeconds().toString().padStart(2, "0");
+                
+                document.getElementById("digitalClock").innerText = `${hours}:${minutes}:${seconds}`;
+            }, 180);
+        }
+        
+        // Stopwatch controls
+        function toggleStopwatch() {
+            const btn = document.getElementById("stopwatchStartBtn");
+            
+            if (!isRunning) {
+                isRunning = true;
+                btn.textContent = "PAUSE";
+                btn.classList.add("text-orange-400");
+                
+                document.getElementById("lapBtn").removeAttribute("disabled");
+                
+                stopwatchInterval = setInterval(() => {
+                    stopwatchTime += 10;
+                    renderStopwatchTime();
+                }, 10);
+            } 
+            else {
+                isRunning = false;
+                btn.textContent = "RESUME";
+                btn.classList.remove("text-orange-400");
+                clearInterval(stopwatchInterval);
+            }
+        }
+        
+        function renderStopwatchTime() {
+            const totalMs = stopwatchTime;
+            const minutes = Math.floor(totalMs / 60000);
+            const seconds = Math.floor((totalMs % 60000) / 1000);
+            const centiseconds = Math.floor((totalMs % 1000) / 10);
+            
+            document.getElementById("stopwatchDisplay").innerText = 
+                `${minutes.toString().padStart(2,"0")}:${seconds.toString().padStart(2,"0")}.${centiseconds.toString().padStart(2,"0")}`;
+        }
+        
+        function recordLap() {
+            if (!isRunning) return;
+            
+            laps.push(stopwatchTime);
+            
+            let html = "";
+            laps.forEach((lapTime, index) => {
+                const lapMin = Math.floor(lapTime / 60000);
+                const lapSec = Math.floor((lapTime % 60000) / 1000);
+                const lapCs = Math.floor((lapTime % 1000) / 10);
+                
+                html += `
+                    <div class="flex justify-between text-xs py-px">
+                        <span class="text-[#5bbcff]">Lap ${index+1}</span>
+                        <span>${lapMin.toString().padStart(2,"0")}:${lapSec.toString().padStart(2,"0")}.${lapCs.toString().padStart(2,"0")}</span>
+                    </div>
+                `;
+            });
+            
+            document.getElementById("lapContainer").innerHTML = html;
+        }
+        
+        function resetStopwatch() {
+            clearInterval(stopwatchInterval);
+            isRunning = false;
+            stopwatchTime = 0;
+            laps = [];
+            
+            document.getElementById("stopwatchDisplay").innerText = "00:00.00";
+            document.getElementById("lapContainer").innerHTML = "";
+            
+            document.getElementById("stopwatchStartBtn").innerText = "START";
+            document.getElementById("stopwatchStartBtn").classList.remove("text-orange-400");
+            document.getElementById("lapBtn").setAttribute("disabled", true);
+        }
+        
+        // Fake toast
+        function showToast(msg) {
+            let toastEl = document.createElement("div");
+            toastEl.style.position = "fixed";
+            toastEl.style.bottom = "30px";
+            toastEl.style.left = "50%";
+            toastEl.style.transform = "translateX(-50%)";
+            toastEl.textContent = msg;
+            toastEl.style.zIndex = "99999";
+            toastEl.style.backgroundColor = "#0a1030";
+            toastEl.style.border = "1px solid #00eaff";
+            toastEl.style.padding = "14px 24px";
+            toastEl.style.borderRadius = "9999px";
+            toastEl.style.fontSize = "13px";
+            toastEl.style.boxShadow = "0px 10px 25px -5px rgb(0 234 255)";
+            document.body.appendChild(toastEl);
+            
+            setTimeout(() => {
+                toastEl.style.transition = "all .3s ease-out";
+                toastEl.style.opacity = 0;
+                toastEl.style.transform = "translate(-50%, 25px)";
+                setTimeout(() => toastEl.remove(), 300);
+            }, 2400);
+        }
+        
+        // Switch page / section visibility
+        function switchPage(page) {
+            document.querySelectorAll(".nav-link").forEach(link => {
+                link.classList.toggle("active", link.getAttribute("data-page") === page);
+            });
+            
+            document.querySelectorAll(".nav-link-mobile").forEach(link => {
+                link.classList.toggle("text-[#00eaff]", link.getAttribute("data-page") === page);
+            });
+            
+            // Scroll to the section
+            const section = document.getElementById(page);
+            
+            if (page === "home") {
+                window.scrollTo({
+                    top: 0,
+                    behavior:'smooth'
+                });
+            } 
+            else {
+                const navbarHeight = 74;
+                const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+                
+                window.scrollTo({
+                    top: sectionTop - navbarHeight,
+                    behavior:'smooth'
+                });
+            }
+        }
+        
+        // Mouse parallax for hero title
+        function heroParallax() {
+            const hero = document.querySelector("#home");
+            let ticking = false;
+
+            hero.addEventListener("mousemove", (e) => {
+                if (ticking) return;
+
+                requestAnimationFrame(() => {
+                    const x = (e.clientX / window.innerWidth) * 12;
+                    const y = (e.clientY / window.innerHeight) * 8;
+
+                    document.querySelector("h1").style.transform =
+                        `translate(${x}px, ${y}px)`;
+
+                    ticking = false;
+                });
+
+                ticking = true;
+            });
+        }
+
+        
+        // Scroll progress handler
+        function handleScrollProgress() {
+            window.addEventListener("scroll", () => {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrollPercent = (scrollTop / docHeight) * 100;
+                document.getElementById("scrollProgress").style.width = scrollPercent + "%";
+            });
+        }
+        
+        //add more papers to simulate depth
+        function addDemoPapers() {
+            allPapers.push({
+                id: 4,
+                title: "Gravitational Theory",
+                desc: "Newton’s law of universal gravitation describes gravity as an attractive force between masses, while Einstein’s general theory of relativity defines it as the curvature of spacetime caused by mass and energy. Newton’s formula is effective for everyday physics, whereas Einstein’s theory, which explains that mass tells space how to curve and space tells mass how to move, is necessary for high gravity and relativistic speeds. ",
+                date: "2026.02.07",
+                category: "Physics",
+                file: "papers/Gravitational_Theory.pdf",
+                image: "thumbnails/gravitational_theory.png",
+                readTime: "60 min"
+            });
+            
+            allPapers.push({
+                id: 5,
+                title: "Quasar",
+                desc: "Quasars (quasi-stellar radio sources) are the extremely luminous and energetic cores of distant galaxies, powered by supermassive black holes accreting matter at their centers. As the brightest objects in the universe, they can outshine entire galaxies, emitting 1,000 times more light than the Milky Way. They are found billions of light-years away and existed when the universe was much younger.",
+                date: "2026.02.07",
+                category: "Universe",
+                file: "papers/Quasar.pdf",
+                image: "thumbnails/quasar.png",
+                readTime: "60 min"
+            });
+        }
+        
+        // Initialize everything
+                /* ===========================
+        3D SCHOLAR SCENE
+        =========================== */
+        function initScholarScene() {
+
+            const container = document.getElementById("scholar3D");
+            if (!container) return;
+
+            const scene = new THREE.Scene();
+
+            const camera = new THREE.PerspectiveCamera(
+                45,
+                container.clientWidth / container.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({
+                alpha: true,
+                antialias: true,
+                powerPreference: "high-performance"
+            });
+
+            // SUPER IMPORTANT PERFORMANCE BOOST
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.shadowMap.enabled = false; // shadows are expensive & unused
+            renderer.outputEncoding = THREE.sRGBEncoding;
+
+            container.appendChild(renderer.domElement);
+
+            // Lights
+            const light = new THREE.DirectionalLight(0x00eaff, 1);
+            light.position.set(5,10,7);
+            scene.add(light);
+
+            const ambient = new THREE.AmbientLight(0xffffff,0.35);
+            scene.add(ambient);
+
+            // Scholar material
+            const material = new THREE.MeshStandardMaterial({ 
+                color:0x7a6bff,
+                roughness:0.4,
+                metalness:0.2
+            });
+
+            // LOW POLY HEAD
+            const head = new THREE.Mesh(
+                new THREE.SphereGeometry(0.6, 8, 8), // 🔥 polygon look
+                material
+            );
+            head.position.y = 1.8;
+
+            // LOW POLY BODY  (THIS creates the flat sliced look you marked)
+            const body = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.6, 0.7, 2, 6), // 🔥 hexagon cylinder
+                material
+            );
+
+            const group = new THREE.Group();
+            group.add(body);
+            group.add(head);
+            scene.add(group);
+
+            camera.position.z = 5;
+
+            let last3DTime = 0;
+            const FPS_3D = 30;
+            const frameDelay3D = 1000 / FPS_3D;
+
+            function animate3D(time = 0){
+                if (time - last3DTime < frameDelay3D) {
+                    requestAnimationFrame(animate3D);
+                    return;
+                }
+                last3DTime = time;
+
+                group.rotation.y += 0.004; // slightly smoother motion
+                renderer.render(scene, camera);
+
+                requestAnimationFrame(animate3D);
+            }
+            animate3D();
+
+        }
+
+        window.onload = () => {
+            // Canvas setup
+            canvas = document.getElementById("bgCanvas");
+            ctx = canvas.getContext("2d", { alpha: true });
+            document.getElementById("year").textContent = new Date().getFullYear();
+            
+            resizeCanvas();
+            window.addEventListener("resize", () => {
+                resizeCanvas();
+            });
+            
+            // Populate stars
+            const STAR_COUNT = window.innerWidth < 768 ? 60 : 110;
+
+            for (let i = 0; i < STAR_COUNT; i++) {
+                particles.push(new Star());
+            }
+
+            
+            generateAurora();
+            
+            animateCanvas();
+            
+            // Render static sections
+            renderWhyCards();
+            addDemoPapers();
+            renderPapers(allPapers.slice(0, displayedPapers));
+
+            
+            // Clock
+            updateClock();
+            
+            // Navbar active states & switching
+            document.querySelectorAll(".nav-link, .nav-link-mobile").forEach(link => {
+                link.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    
+                    const targetPage = this.getAttribute("data-page");
+                    switchPage(targetPage);
+                    
+                    // Close mobile menu
+                    document.getElementById("mobileMenu").classList.add("hidden");
+                });
+            });
+            
+            // Hamburger
+            document.getElementById("mobileToggle").addEventListener("click", () => {
+                const mobileMenu = document.getElementById("mobileMenu");
+                mobileMenu.classList.toggle("hidden");
+                
+                // Toggle icon
+                const icon = document.getElementById("hamburgerIcon");
+                if (!mobileMenu.classList.contains("hidden")) {
+                    icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6h12v12" />`;
+                } else {
+                    icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />`;
+                }
+            });
+            
+            // Custom cursor
+            const cursor = document.getElementById("customCursor");
+            
+            if (window.innerWidth > 1024) {
+                cursor.classList.remove("hidden");
+                
+                document.addEventListener("mousemove", (e) => {
+                    cursor.style.left = e.clientX + "px";
+                    cursor.style.top = e.clientY + "px";
+                });
+            }
+            
+            // Hero parallax
+            heroParallax();
+            
+            // Scroll progress
+            handleScrollProgress();
+            
+            // Keyboard shortcuts (fun easter-egg)
+            window.addEventListener("keydown", function(e){
+                // Press "L" to record a fake lap if stopwatch is running
+                if (e.key === "l" || e.key === "L") {
+                    if (isRunning) {
+                        e.preventDefault();
+                        recordLap();
+                    }
+                }
+            });
+            
+            // Make master card hover glow stronger
+            document.getElementById("masterCard").addEventListener("mouseenter", function(){
+                this.style.boxShadow = "0px 0px 65px 12px rgb(0 234 255)";
+            });
+            
+            document.getElementById("masterCard").addEventListener("mouseleave", function(){
+                this.style.boxShadow = "0_0_60px_-10px #00eaff";
+            });
+            
+            // Fake initial toast
+            setTimeout(() => {
+                showToast("TarkaScience Observatory synchronized • Papers unlocked");
+            }, 1250);
+            
+            console.log("%cWelcome to the TarkaScience Research Library.\nEverything you see here is open source.\nDownload. Cite. Repeat.", 
+                "color:#00eaff;font-weight:500;font-size:13px");
+            initScholarScene();
+        }
+    </script>
+</body>
+</html>
