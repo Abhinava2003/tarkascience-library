@@ -6,6 +6,7 @@
     <title>TarkaScience Research Library — Official Papers & Sources</title>
     <meta name="description" content="Official research library of TarkaScience. Download all scientific papers and sources used in our YouTube videos. 100% free and open access.">
 
+    <link rel="preload" as="document" href="papers/Galaxy_formation.pdf">
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -21,8 +22,8 @@
     <meta property="og:title" content="TarkaScience Research Library">
     <meta property="og:description" content="All papers and sources behind TarkaScience videos.">
     <meta property="og:image" content="images/master.png">
-
-
+    <meta name="author" content="TarkaScience">
+    <meta name="keywords" content="cosmology, physics, quantum mechanics, research papers, science education">
 </head>
 
 <body class="bg-[#03040a] text-white overflow-x-hidden font-sans">
@@ -136,7 +137,17 @@
                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
             </button>
         </div>
-        
+        <!-- ⭐ Latest Paper Banner -->
+        <div id="latestPaperBanner"
+        class="mt-10 inline-flex items-center gap-3 px-6 py-3 bg-[#0a1030]/80 border border-[#00eaff]/30 rounded-full backdrop-blur-xl opacity-0 translate-y-6 transition-all duration-700">
+            <span class="text-[10px] tracking-widest text-[#7a6bff]">LATEST PAPER</span>
+            <span id="latestPaperTitle" class="text-xs text-[#b9c2ff]"></span>
+            <button id="latestPaperBtn"
+                class="text-[10px] text-[#00eaff] hover:text-white transition-colors">
+                VIEW →
+            </button>
+        </div>
+
         <!-- Scroll prompt -->
         <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
             <div class="text-[10px] tracking-[0.065em] text-[#5bbcff] mb-1">SCROLL TO ENTER ARCHIVE</div>
@@ -172,7 +183,7 @@
         <div class="sticky top-[73px] z-30 bg-[#070b1f]/90 backdrop-blur-lg border-b border-[#00eaff]/10">
             <div class="max-w-screen-2xl mx-auto px-6 lg:px-16 py-4 flex items-center justify-between">
                 <div>
-                    <span class="font-orbitron text-xs tracking-[0.065em] text-[#00eaff]">ARCHIVE • 15 PAPERS • 128GB</span>
+                    <span id="paperCounter" class="font-orbitron text-xs tracking-[0.065em] text-[#00eaff]"> ARCHIVE • 0 PAPERS • OPEN ACCESS </span>
                 </div>
                 
                 <div class="flex items-center gap-2 text-xs uppercase">
@@ -197,7 +208,15 @@
                 <h2 class="font-orbitron text-[4.75rem] leading-none tracking-[-0.01em] mb-2">Research Papers</h2>
                 <p class="text-[#8894cc] text-sm">Peer-reviewed sources • Open access • Last sync: 11 minutes ago</p>
             </div>
-            
+            <!-- 🔎 SEARCH BAR -->
+            <div class="mt-6 max-w-xl">
+                <input 
+                    id="paperSearch"
+                    type="text"
+                    placeholder="Search papers, topics, theories..."
+                    class="w-full bg-[#0a1030] border border-[#00eaff]/30 rounded-xl px-5 py-3 text-sm focus:outline-none focus:border-[#00eaff] placeholder:text-[#5a678f]"
+                >
+            </div>
             <!-- Papers grid -->
             <div id="papersGrid" 
                  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12">
@@ -454,6 +473,40 @@
                 </div>
             </div>
         </div>
+        <!-- PDF VIEWER MODAL -->
+        <div id="pdfModal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[99999] hidden">
+
+            <!-- Top Bar -->
+            <div class="absolute top-0 left-0 right-0 h-16 bg-[#070b1f] border-b border-[#00eaff]/20 flex items-center justify-between px-6">
+                
+                <div class="flex items-center gap-4">
+                    <span class="font-orbitron text-[#00eaff] text-sm">RESEARCH VIEWER</span>
+                    <span id="pdfTitle" class="text-[#8894cc] text-xs"></span>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button id="pdfDownloadBtn"
+                        class="px-4 py-2 text-xs border border-[#00eaff] text-[#00eaff] hover:bg-[#00eaff] hover:text-black rounded-full cursor-pointer">
+                        DOWNLOAD PDF
+                    </button>
+
+                    <button onclick="closePDF()"
+                        class="text-white text-xl hover:text-[#00eaff]">✕</button>
+                </div>
+            </div>
+
+            <!-- PDF Reading Progress -->
+            <div id="pdfProgressBar"
+                class="absolute top-16 left-0 h-[2px] bg-[#00eaff] w-0 transition-all duration-150">
+            </div>
+
+            <!-- PDF Frame -->
+            <iframe id="pdfFrame"
+                class="absolute top-16 left-0 w-full h-[calc(100%-64px)] bg-black">
+            </iframe>
+
+        </div>
+
     </footer>
 
     <script>
@@ -664,7 +717,7 @@
             const scale = window.devicePixelRatio > 1 ? 0.8 : 1;
             canvas.width = window.innerWidth * scale;
             canvas.height = window.innerHeight * scale;
-            ctx.scale(scale, scale);
+            ctx.setTransform(scale, 0, 0, scale, 0, 0);
 
             
             // Re-create stars to match new dimensions
@@ -690,8 +743,7 @@
                                  class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
                             
                             <!-- Overlay glow -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#03040a] via-[#03040a]/70 to-transparent"></div>
-                            
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#03040a] via-[#03040a]/70 to-transparent pointer-events-none"></div>                            
                             <!-- Category badge -->
                             <div class="absolute top-4 left-4 bg-[#00eaff]/90 text-[#03040a] text-[10px] font-mono tracking-widest px-3 py-px rounded-full uppercase text-xs">
                                 ${paper.category}
@@ -708,12 +760,12 @@
                             <div class="mt-6 flex items-center justify-between">
                                 <span class="uppercase text-[10px] font-medium text-[#7a6bff]">${paper.readTime}</span>
                                 
-                                <button onclick="downloadPaper(${paper.id})" 
-                                    class="bg-[#00eaff] text-[#03040a] hover:bg-[#7a6bff] hover:text-white transition-all px-5 py-px text-xs rounded-full flex items-center gap-2 text-[11px] font-semibold">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M4 16v-4m0 0l4 4m-4-4l4-4m12 4v4m0-4l-4-4m4 4l-4 4" />
-                                    </svg> PDF
+                                <button type="button"
+                                    onclick="openPDF(${paper.id}); event.stopPropagation();"
+                                    class="relative z-10 bg-[#00eaff] text-[#03040a] hover:bg-[#7a6bff] hover:text-white transition-all px-5 py-px text-xs rounded-full flex items-center gap-2 text-[11px] font-semibold cursor-pointer">
+                                    VIEW PDF
                                 </button>
+
                             </div>
                         </div>
                     </div>
@@ -728,13 +780,96 @@
             });
         }
         
-        // Download handler (fake)
-        function downloadPaper(id) {
-            const paper = allPapers.find(p => p.id === id);
-            if (!paper || !paper.file) return;
+        /* ===============================
+        📊 AUTO PAPER COUNTER
+        =============================== */
 
-            window.open(paper.file, "_blank");
+        function updatePaperCounter(){
+            const count = allPapers.length;
+            const counter = document.getElementById("paperCounter");
+            if(counter){
+                counter.textContent = `ARCHIVE • ${count} PAPERS • OPEN ACCESS`;
+            }
         }
+
+        /* ===============================
+        🚀 LATEST PAPER BANNER
+        =============================== */
+
+        function initLatestPaperBanner(){
+
+            if(!allPapers.length) return;
+
+            // latest = last paper in array
+            const latestPaper = allPapers[allPapers.length - 1];
+
+            document.getElementById("latestPaperTitle").textContent = latestPaper.title;
+
+            // open viewer when clicked
+            document.getElementById("latestPaperBtn").onclick = () => {
+                openPDF(latestPaper.id);
+                switchPage("papers");
+            };
+
+            // animate appearance after load
+            setTimeout(()=>{
+                const banner = document.getElementById("latestPaperBanner");
+                banner.style.opacity = "1";
+                banner.style.transform = "translateY(0)";
+            }, 1800);
+        }
+
+        // OPEN PDF IN MODAL
+        let pdfProgressInterval = null;
+
+        function openPDF(id) {
+            const paper = allPapers.find(p => p.id === id);
+            if (!paper) return;
+
+            const frame = document.getElementById("pdfFrame");
+            frame.src = paper.file;
+            document.getElementById("pdfTitle").innerText = paper.title;
+
+            // DOWNLOAD BUTTON
+            const btn = document.getElementById("pdfDownloadBtn");
+            btn.onclick = () => {
+                const link = document.createElement("a");
+                link.href = paper.file;
+                link.download = paper.title + ".pdf";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            document.getElementById("pdfModal").classList.remove("hidden");
+
+            // ⭐ FAKE SMART READING PROGRESS
+            let progress = 0;
+            const bar = document.getElementById("pdfProgressBar");
+            bar.style.width = "0%";
+
+            clearInterval(pdfProgressInterval);
+
+            pdfProgressInterval = setInterval(() => {
+                if (progress < 92) {   // stop near end (feels realistic)
+                    progress += Math.random() * 0.8;
+                    bar.style.width = progress + "%";
+                }
+            }, 800);
+
+            document.body.style.overflow = "hidden";
+        }
+
+
+        // CLOSE PDF
+       function closePDF() {
+            document.getElementById("pdfModal").classList.add("hidden");
+            document.getElementById("pdfFrame").src = "";
+            document.getElementById("pdfProgressBar").style.width = "0%";
+            document.body.style.overflow = "auto";
+            clearInterval(pdfProgressInterval);
+        }
+
 
         
         // Filter papers by category
@@ -760,6 +895,29 @@
             displayedPapers = filtered.length;
             renderPapers(filtered);
         }
+        /* ===============================
+        🔎 PAPER SEARCH ENGINE
+        =============================== */
+
+        document.addEventListener("input", function(e) {
+
+            if (e.target.id !== "paperSearch") return;
+
+            const query = e.target.value.toLowerCase().trim();
+
+            if (query === "") {
+                renderPapers(allPapers.slice(0, displayedPapers));
+                return;
+            }
+
+            const results = allPapers.filter(paper =>
+                paper.title.toLowerCase().includes(query) ||
+                paper.desc.toLowerCase().includes(query) ||
+                paper.category.toLowerCase().includes(query)
+            );
+
+            renderPapers(results);
+        });
         
         //load more
         function fakeLoadMore() {
@@ -795,7 +953,7 @@
                     <h4 class="font-orbitron text-xl tracking-[-0.005em] mb-4">Transparency</h4>
                     <p class="text-[#8894cc] text-sm leading-relaxed flex-1">Nothing is hidden behind paywalls or “supplementary material” links. Every number, graph, and dataset used in the videos is here.</p>
                     
-                    <div class="mt-auto text-[11px] text-[#5bbcff] font-mono pt-6 border-t border-[#00eaff]/10">52 verified sources</div>
+                    <div class="mt-auto text-[11px] text-[#5bbcff] font-mono pt-6 border-t border-[#00eaff]/10">500+ verified sources</div>
                 </div>
                 
                 <!-- Card 2 -->
@@ -805,7 +963,7 @@
                     <h4 class="font-orbitron text-xl tracking-[-0.005em] mb-4">Curiosity Engine</h4>
                     <p class="text-[#8894cc] text-sm leading-relaxed flex-1">This library is not an afterthought. It is the reason the channel exists. We find the paper first — then film the story.</p>
                     
-                    <div class="mt-auto text-[11px] text-[#5bbcff] font-mono pt-6 border-t border-[#7a6bff]/10">15 stories • 0 filler</div>
+                    <div class="mt-auto text-[11px] text-[#5bbcff] font-mono pt-6 border-t border-[#7a6bff]/10">16 • 0 filler</div>
                 </div>
                 
                 <!-- Card 3 -->
@@ -1023,7 +1181,7 @@
             });
 
             allPapers.push({
-                id: 5,
+                id: 6,
                 title: "Time Dialation",
                 desc: "Time dilation is a physics phenomenon, rooted in Albert Einstein's theory of relativity, where time passes slower for an object in motion or within a strong gravitational field compared to a stationary observer. It means a moving clock ticks slower than a stationary one, a real effect rather than a mechanical error, causing high-speed travelers to age less.",
                 date: "2026.02.07",
@@ -1034,7 +1192,7 @@
             });
 
             allPapers.push({
-                id: 5,
+                id: 7,
                 title: "Big Bang",
                 desc: "The Big Bang theory is the prevailing cosmological model explaining that the universe expanded from an extremely hot, dense state roughly 13.8 billion years ago. It describes the rapid expansion and cooling of space itself—not an explosion in space—creating matter, energy, and the, currently still expanding, universe.",
                 date: "2026.02.07",
@@ -1045,7 +1203,7 @@
             });
 
             allPapers.push({
-                id: 5,
+                id: 8,
                 title: "Wave Particle",
                 desc: "Wave-particle duality is a fundamental quantum mechanics principle stating that all energy and matter exhibit both wave-like (interference, diffraction) and particle-like (localized, discrete packets) properties. Proposed by Louis de Broglie in 1924, this concept means that entities like photons and electrons behave as waves while traveling but as particles upon interaction.",
                 date: "2026.02.07",
@@ -1056,7 +1214,7 @@
             });
 
             allPapers.push({
-                id: 5,
+                id: 9,
                 title: "Quantum Superposition",
                 desc: "Quantum superposition is a fundamental principle of quantum mechanics where a physical system, such as an electron or photon, exists in multiple states, locations, or configurations simultaneously until it is measured. This wavelike phenomenon allows quantum objects to be in a combination of states, such as 0 and 1, rather than just one or the other. ",
                 date: "2026.02.07",
@@ -1067,7 +1225,7 @@
             });
 
             allPapers.push({
-                id: 5,
+                id: 10,
                 title: "Wormholes",
                 desc: "Wormholes, or Einstein-Rosen bridges, are theoretical, unstable tunnels in spacetime connecting distant points, potentially allowing for faster-than-light travel or time travel. While permitted by Einstein's general relativity, they have not been observed and likely require 'exotic matter' with negative energy to stay open.",
                 date: "2026.02.07",
@@ -1078,7 +1236,7 @@
             });
 
             allPapers.push({
-                id: 5,
+                id: 11,
                 title: "Dark Matter",
                 desc: "Dark matter is a hypothetical, invisible form of matter comprising roughly 85% of the total matter in the universe, believed to act as gravitational scaffolding that holds galaxies together. It does not interact with light or electromagnetic radiation, making it detectable only through its gravitational influence on visible matter.",
                 date: "2026.02.07",
@@ -1089,7 +1247,7 @@
             });
 
             allPapers.push({
-                id: 5,
+                id: 12,
                 title: "Spacetime Curvature",
                 desc: "Spacetime curvature, central to Einstein's general relativity, defines gravity not as a force, but as the warping of four-dimensional space and time by mass and energy. Massive objects like stars and planets bend the surrounding spacetime, creating a 'dip' that dictates the paths (geodesics) objects follow. 'Matter tells spacetime how to curve, and spacetime tells matter how to move'.",
                 date: "2026.02.07",
@@ -1100,7 +1258,7 @@
             });
 
             allPapers.push({
-                id: 5,
+                id: 13,
                 title: "The Dark Energy",
                 desc: "Dark energy is a mysterious, invisible force constituting approximately 68-70% of the universe that drives its accelerated expansion. Unlike gravity, which pulls matter together, dark energy acts as a uniform, repulsive force throughout space, influencing the cosmos on the largest scales. It is a central, yet largely unknown, component of modern cosmology.",
                 date: "2026.02.07",
@@ -1111,7 +1269,7 @@
             });
 
             allPapers.push({
-                id: 5,
+                id: 14,
                 title: "Supernova",
                 desc: "A supernova is the colossal, luminous explosion marking the end of a massive star's life or the destruction of a white dwarf, briefly outshining entire galaxies. These cataclysmic events occur when stars at least eight times the Sun's mass collapse, or when white dwarfs gain too much mass. They disperse heavy elements throughout space, crucial for new star formation.",
                 date: "2026.02.07",
@@ -1122,7 +1280,7 @@
             });
 
             allPapers.push({
-                id: 5,
+                id: 15,
                 title: "The Neutron Star",
                 desc: "A neutron star is the ultra-dense, collapsed core of a massive star that exploded as a supernova, packing the mass of a sun into a sphere only about 12 miles wide, making it one of the densest objects in the universe, essentially a giant atomic nucleus with immense gravity, rapid spin, and powerful magnetic fields. They are composed mostly of neutrons, formed when protons and electrons are crushed together, and can manifest as spinning, pulsing pulsars or extremely magnetic magnetars.",
                 date: "2026.02.07",
@@ -1133,7 +1291,7 @@
             });
 
             allPapers.push({
-                id: 5,
+                id: 16,
                 title: "The Pulsar Paradigm",
                 desc: "'The Pulsar Paradigm' refers to the scientific understanding of pulsars as rapidly rotating neutron stars, which serve as crucial, high-precision tools for probing fundamental physics, gravity, and the structure of the universe. Discovered in 1967, these 'cosmic lighthouses' are the dense, magnetized, rotating remnants of exploded stars.",
                 date: "2026.02.07",
@@ -1259,7 +1417,8 @@
             renderWhyCards();
             addDemoPapers();
             renderPapers(allPapers.slice(0, displayedPapers));
-
+            updatePaperCounter();
+            initLatestPaperBanner();   // ⭐ NEW
             
             // Clock
             updateClock();
@@ -1309,16 +1468,24 @@
             // Scroll progress
             handleScrollProgress();
             
-            // Keyboard shortcuts (fun easter-egg)
+            // Keyboard shortcuts (power users)
             window.addEventListener("keydown", function(e){
-                // Press "L" to record a fake lap if stopwatch is running
+
+                // L → record stopwatch lap
                 if (e.key === "l" || e.key === "L") {
                     if (isRunning) {
                         e.preventDefault();
                         recordLap();
                     }
                 }
+
+                // ESC → close PDF viewer
+                if (e.key === "Escape") {
+                    closePDF();
+                }
+
             });
+
             
             // Make master card hover glow stronger
             document.getElementById("masterCard").addEventListener("mouseenter", function(){
@@ -1336,6 +1503,11 @@
             
             console.log("%cWelcome to the TarkaScience Research Library.\nEverything you see here is open source.\nDownload. Cite. Repeat.", 
                 "color:#00eaff;font-weight:500;font-size:13px");
+            // Close PDF if user clicks background
+            document.getElementById("pdfModal").addEventListener("click", function(e){
+                if (e.target === this) closePDF();
+            });
+
             initScholarScene();
         }
     </script>
