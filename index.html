@@ -24,7 +24,32 @@
     <meta property="og:image" content="images/master.png">
     <meta name="author" content="TarkaScience">
     <meta name="keywords" content="cosmology, physics, quantum mechanics, research papers, science education">
+
+<style>
+.statCard{
+    background:#0a1030;
+    border:1px solid rgba(0,234,255,.25);
+    padding:22px;
+    border-radius:20px;
+    text-align:center;
+}
+
+.statValue{
+    font-family:Orbitron;
+    font-size:34px;
+    color:#00eaff;
+}
+
+.statLabel{
+    font-size:11px;
+    color:#8894cc;
+    margin-top:4px;
+    letter-spacing:1px;
+}
+</style>
+
 </head>
+
 
 <body class="bg-[#03040a] text-white overflow-x-hidden font-sans">
     <!-- Scroll Progress -->
@@ -200,6 +225,37 @@
         </div>
         
         <div class="max-w-screen-2xl mx-auto px-6 lg:px-16">
+            <!-- 📊 RESEARCH DASHBOARD -->
+            <div id="researchDashboard"
+                class="mb-16 grid grid-cols-2 md:grid-cols-5 gap-6">
+
+                <div class="statCard">
+                    <div class="statValue" id="statTotal">0</div>
+                    <div class="statLabel">TOTAL PAPERS</div>
+                </div>
+
+                <div class="statCard">
+                    <div class="statValue" id="statUniverse">0</div>
+                    <div class="statLabel">COSMOLOGY</div>
+                </div>
+
+                <div class="statCard">
+                    <div class="statValue" id="statPhysics">0</div>
+                    <div class="statLabel">PHYSICS</div>
+                </div>
+
+                <div class="statCard">
+                    <div class="statValue" id="statQuantum">0</div>
+                    <div class="statLabel">QUANTUM</div>
+                </div>
+
+                <div class="statCard">
+                    <div class="statValue" id="statReadTime">0h</div>
+                    <div class="statLabel">READING HOURS</div>
+                </div>
+
+            </div>
+
             <!-- Section header -->
             <div class="pt-12 pb-8">
                 <div class="inline-block mb-2">
@@ -217,6 +273,18 @@
                     class="w-full bg-[#0a1030] border border-[#00eaff]/30 rounded-xl px-5 py-3 text-sm focus:outline-none focus:border-[#00eaff] placeholder:text-[#5a678f]"
                 >
             </div>
+
+            <!-- ⭐ SAVED PAPERS -->
+            <div id="savedSection" class="mb-12 hidden">
+
+                <h3 class="font-orbitron text-3xl text-[#00eaff] mb-6">
+                    Your Saved Papers
+                </h3>
+
+                <div id="savedGrid"
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            </div>
+
             <!-- Papers grid -->
             <div id="papersGrid" 
                  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12">
@@ -461,10 +529,10 @@
             <div class="flex flex-col md:flex-row items-center justify-between text-xs text-[#5a678f]">
                 <div class="flex items-center gap-3 mb-5 md:mb-0">
                     <span class="font-orbitron text-[#00eaff] text-sm">TARKASCIENCE</span> 
-                    <span class="text-[11px] tracking-widest">RESEARCH ARCHIVES v4.1</span>
+                    <span class="text-[11px] tracking-widest">RESEARCH ARCHIVES</span>
                 </div>
                 
-                <div class="font-mono text-xs">© <span id="year"></span> TarkaScience — Educational use. All papers belong to their respective authors. All papers are public domain or CC-BY 4.0.</div>
+                <div class="font-mono text-xs">© <span id="year"></span> TarkaScience — Educational use.All papers are public domain or CC-BY 4.0.</div>
                 
                 <div class="flex gap-6 text-xs mt-5 md:mt-0">
                     <a href="privacy.html" class="hover:text-[#00eaff] transition-colors">PRIVACY OF DATA</a>
@@ -479,10 +547,17 @@
             <!-- Top Bar -->
             <div class="absolute top-0 left-0 right-0 h-16 bg-[#070b1f] border-b border-[#00eaff]/20 flex items-center justify-between px-6">
                 
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-6">
                     <span class="font-orbitron text-[#00eaff] text-sm">RESEARCH VIEWER</span>
                     <span id="pdfTitle" class="text-[#8894cc] text-xs"></span>
+
+                    <!-- NEW: Reading Timer -->
+                    <span id="readingTimer"
+                        class="text-[11px] text-[#7a6bff] font-mono">
+                        Reading: 00:00
+                    </span>
                 </div>
+
 
                 <div class="flex items-center gap-4">
                     <button id="pdfDownloadBtn"
@@ -758,14 +833,25 @@
                             <p class="text-xs text-[#8894cc] leading-relaxed flex-1">${paper.desc}</p>
                             
                             <div class="mt-6 flex items-center justify-between">
-                                <span class="uppercase text-[10px] font-medium text-[#7a6bff]">${paper.readTime}</span>
-                                
-                                <button type="button"
-                                    onclick="openPDF(${paper.id}); event.stopPropagation();"
-                                    class="relative z-10 bg-[#00eaff] text-[#03040a] hover:bg-[#7a6bff] hover:text-white transition-all px-5 py-px text-xs rounded-full flex items-center gap-2 text-[11px] font-semibold cursor-pointer">
-                                    VIEW PDF
-                                </button>
 
+                                <span class="uppercase text-[10px] font-medium text-[#7a6bff]">${paper.readTime}</span>
+
+                                <div class="flex items-center gap-3">
+
+                                    <!-- ⭐ SAVE BUTTON -->
+                                    <button onclick="toggleSavePaper(${paper.id}); event.stopPropagation();"
+                                        class="text-xl text-[#8894cc] hover:text-yellow-400 transition-colors">
+                                        ${isPaperSaved(paper.id) ? "★" : "☆"}
+                                    </button>
+
+                                    <!-- VIEW BUTTON -->
+                                    <button type="button"
+                                        onclick="openPDF(${paper.id}); event.stopPropagation();"
+                                        class="relative z-10 bg-[#00eaff] text-[#03040a] hover:bg-[#7a6bff] hover:text-white transition-all px-5 py-px text-xs rounded-full flex items-center gap-2 text-[11px] font-semibold cursor-pointer">
+                                        VIEW PDF
+                                    </button>
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -779,6 +865,38 @@
                 new CardTilt(card);
             });
         }
+
+        function renderSavedPapers(){
+
+            const savedIds = getSavedPapers();
+            const savedSection = document.getElementById("savedSection");
+            const savedGrid = document.getElementById("savedGrid");
+
+            if(savedIds.length === 0){
+                savedSection.classList.add("hidden");
+                return;
+            }
+
+            savedSection.classList.remove("hidden");
+
+            const savedPapers = allPapers.filter(p => savedIds.includes(p.id));
+
+            let html = "";
+
+            savedPapers.forEach(paper => {
+                html += `
+                    <div onclick="openPDF(${paper.id})"
+                        class="cursor-pointer bg-[#0a1030] border border-yellow-400/40 hover:border-yellow-400 p-4 rounded-2xl transition-all">
+
+                        <div class="text-xs text-yellow-400 font-orbitron mb-1">${paper.title}</div>
+                        <div class="text-[10px] text-[#8894cc]">${paper.readTime}</div>
+                    </div>
+                `;
+            });
+
+            savedGrid.innerHTML = html;
+        }
+
         
         /* ===============================
         📊 AUTO PAPER COUNTER
@@ -819,8 +937,41 @@
             }, 1800);
         }
 
+        /* ===============================
+        ⭐ SAVE / BOOKMARK SYSTEM
+        =============================== */
+
+        // get saved papers from browser
+        function getSavedPapers(){
+            return JSON.parse(localStorage.getItem("savedPapers") || "[]");
+        }
+
+        function isPaperSaved(id){
+            return getSavedPapers().includes(id);
+        }
+
+        function toggleSavePaper(id){
+
+            let saved = getSavedPapers();
+
+            if(saved.includes(id)){
+                saved = saved.filter(p => p !== id);
+                showToast("Removed from saved papers");
+            }else{
+                saved.push(id);
+                showToast("Saved to your library ⭐");
+            }
+
+            localStorage.setItem("savedPapers", JSON.stringify(saved));
+
+            renderSavedPapers();   // update saved section
+            renderPapers(allPapers.slice(0, displayedPapers)); // refresh stars
+        }
+
         // OPEN PDF IN MODAL
         let pdfProgressInterval = null;
+        let readingInterval = null;   // ⭐ THIS WAS MISSING
+        let readingSeconds = 0;
 
         function openPDF(id) {
             const paper = allPapers.find(p => p.id === id);
@@ -842,6 +993,17 @@
             };
 
             document.getElementById("pdfModal").classList.remove("hidden");
+
+            // 📖 START READING TIMER
+            readingSeconds = 0;
+            updateReadingTimer();
+
+            if (readingInterval) clearInterval(readingInterval);
+            readingInterval = setInterval(() => {
+                readingSeconds++;
+                updateReadingTimer();
+            }, 1000);
+
 
             // ⭐ FAKE SMART READING PROGRESS
             let progress = 0;
@@ -868,9 +1030,8 @@
             document.getElementById("pdfProgressBar").style.width = "0%";
             document.body.style.overflow = "auto";
             clearInterval(pdfProgressInterval);
+            clearInterval(readingInterval); // NEW
         }
-
-
         
         // Filter papers by category
         function filterCategory(cat) {
@@ -1390,6 +1551,40 @@
 
         }
 
+        function updateReadingTimer() {
+
+            const hours = Math.floor(readingSeconds / 3600);
+            const minutes = Math.floor((readingSeconds % 3600) / 60);
+            const seconds = readingSeconds % 60;
+
+            document.getElementById("readingTimer").textContent =
+                `Reading: ${hours.toString().padStart(2,'0')}:` +
+                `${minutes.toString().padStart(2,'0')}:` +
+                `${seconds.toString().padStart(2,'0')}`;
+        }
+
+        /* ===============================
+        📊 AUTO RESEARCH DASHBOARD
+        =============================== */
+
+        function updateResearchStats(){
+
+            const total = allPapers.length;
+
+            const universe = allPapers.filter(p => p.category === "Universe").length;
+            const physics  = allPapers.filter(p => p.category === "Physics").length;
+            const quantum  = allPapers.filter(p => p.category === "Quantum").length;
+
+            // estimate reading hours (1 paper = 1 hour)
+            const hours = total * 1;
+
+            document.getElementById("statTotal").textContent = total;
+            document.getElementById("statUniverse").textContent = universe;
+            document.getElementById("statPhysics").textContent = physics;
+            document.getElementById("statQuantum").textContent = quantum;
+            document.getElementById("statReadTime").textContent = hours + "h";
+        }
+
         window.onload = () => {
             // Canvas setup
             canvas = document.getElementById("bgCanvas");
@@ -1418,7 +1613,9 @@
             addDemoPapers();
             renderPapers(allPapers.slice(0, displayedPapers));
             updatePaperCounter();
-            initLatestPaperBanner();   // ⭐ NEW
+            initLatestPaperBanner();
+            renderSavedPapers();   
+            updateResearchStats(); //  NEW
             
             // Clock
             updateClock();
@@ -1513,4 +1710,3 @@
     </script>
 </body>
 </html>
-
