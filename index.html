@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TarkaScience Research Library — Official Papers & Sources</title>
-    <meta name="description" content="Official research library of TarkaScience. Download all scientific papers and sources used in our YouTube videos. 100% free and open access.">
+    <title>TarkaScience — Official Website</title>
+    <meta name="description" content="Official website of TarkaScience. Explore research papers, scientific sources and tools behind the videos. 100% free and open access.">
 
     <link rel="preload" as="document" href="papers/Galaxy_formation.pdf">
 
@@ -19,13 +19,29 @@
     <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
     <link rel="manifest" href="favicon/site.webmanifest">
 
-    <meta property="og:title" content="TarkaScience Research Library">
-    <meta property="og:description" content="All papers and sources behind TarkaScience videos.">
+    <meta property="og:title" content="TarkaScience — Official Website">
+    <meta property="og:description" content="Explore the research and science behind TarkaScience videos.">
     <meta property="og:image" content="images/master.png">
     <meta name="author" content="TarkaScience">
     <meta name="keywords" content="cosmology, physics, quantum mechanics, research papers, science education">
 
 <style>
+/* 🌙 READING MODE */
+.reading-mode #bgCanvas,
+.reading-mode #navbar,
+.reading-mode #scrollProgress,
+.reading-mode #customCursor {
+    opacity: 0 !important;
+}
+
+.reading-mode #pdfModal {
+    background: #000 !important;
+}
+
+.reading-mode iframe {
+    box-shadow: 0 0 120px rgba(0,234,255,0.25);
+}
+
 .statCard{
     background:#0a1030;
     border:1px solid rgba(0,234,255,.25);
@@ -49,6 +65,12 @@
 </style>
 
 </head>
+
+<div id="loader" class="fixed inset-0 bg-[#03040a] z-[999999] flex items-center justify-center">
+    <div class="text-[#00eaff] font-orbitron text-xl tracking-widest animate-pulse">
+        LOADING TARKASCIENCE...
+    </div>
+</div>
 
 
 <body class="bg-[#03040a] text-white overflow-x-hidden font-sans">
@@ -81,6 +103,7 @@
                 <a href="#" data-page="papers" class="nav-link relative text-[#b9c2ff] hover:text-[#00eaff] transition-colors">RESEARCH PAPERS</a>
                 <a href="#" data-page="team" class="nav-link relative text-[#b9c2ff] hover:text-[#00eaff] transition-colors">TEAM</a>
                 <a href="#" data-page="tools" class="nav-link relative text-[#b9c2ff] hover:text-[#00eaff] transition-colors">TOOLS</a>
+                <a href="about.html" class="text-[#b9c2ff] hover:text-[#00eaff] transition-colors">ABOUT</a>
             </div>
             
             <div class="flex items-center gap-3">
@@ -144,10 +167,12 @@
                 TARKA<br><span class="text-[#00eaff]">SCIENCE</span>
             </h1>
             
-            <p class="font-light text-[#b9c2ff] text-base md:text-lg tracking-[0.065em] mb-8">RESEARCH LIBRARY</p>
+            <p class="font-light text-[#b9c2ff] text-base md:text-lg tracking-[0.065em] mb-8">SCIENCE EXPLAINED SIMPLY</p>
+
             
             <p class="max-w-md mx-auto text-sm md:text-base text-[#8894cc] mb-10 leading-relaxed">
-                Every citation. Every dataset.<br>Behind every TarkaScience video.
+            Exploring the universe, physics and scientific mysteries.<br>
+            Making complex science simple and understandable for everyone.
             </p>
             
             <!-- CTA -->
@@ -175,7 +200,7 @@
 
         <!-- Scroll prompt -->
         <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-            <div class="text-[10px] tracking-[0.065em] text-[#5bbcff] mb-1">SCROLL TO ENTER ARCHIVE</div>
+            <div class="text-[10px] tracking-[0.065em] text-[#5bbcff] mb-1">SCROLL TO EXPLORE</div>
             <div class="h-px w-7 bg-[#00eaff]/50"></div>
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-9 stroke-[#00eaff]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 14l-9-9m0 0L5 10" />
@@ -208,7 +233,7 @@
         <div class="sticky top-[73px] z-30 bg-[#070b1f]/90 backdrop-blur-lg border-b border-[#00eaff]/10">
             <div class="max-w-screen-2xl mx-auto px-6 lg:px-16 py-4 flex items-center justify-between">
                 <div>
-                    <span id="paperCounter" class="font-orbitron text-xs tracking-[0.065em] text-[#00eaff]"> ARCHIVE • 0 PAPERS • OPEN ACCESS </span>
+                    <span id="paperCounter" class="font-orbitron text-xs tracking-[0.065em] text-[#00eaff]"> RESEARCH • 0 PAPERS • OPEN ACCESS</span>
                 </div>
                 
                 <div class="flex items-center gap-2 text-xs uppercase">
@@ -261,8 +286,8 @@
                 <div class="inline-block mb-2">
                     <span class="bg-[#00eaff]/10 text-[#00eaff] text-xs font-mono tracking-[0.065em] px-5 py-px">DATASTREAM ACTIVE</span>
                 </div>
-                <h2 class="font-orbitron text-[4.75rem] leading-none tracking-[-0.01em] mb-2">Research Papers</h2>
-                <p class="text-[#8894cc] text-sm">Peer-reviewed sources • Open access • Last sync: 11 minutes ago</p>
+                <h2 class="font-orbitron text-[4.75rem] leading-none tracking-[-0.01em] mb-2">Research & Sources</h2>
+                <p class="text-[#8894cc] text-sm">Scientific sources behind TarkaScience videos</p>
             </div>
             <!-- 🔎 SEARCH BAR -->
             <div class="mt-6 max-w-xl">
@@ -322,7 +347,7 @@
                 </div>
                 
                 <div class="mt-3 lg:mt-0 text-sm text-[#8894cc] max-w-[260px]">
-                    One researcher.<br>Zero gatekeepers.<br>Absolute transparency.
+                    Research-driven.<br>Open access.<br>Built for curious minds.
                 </div>
             </div>
             
@@ -529,7 +554,7 @@
             <div class="flex flex-col md:flex-row items-center justify-between text-xs text-[#5a678f]">
                 <div class="flex items-center gap-3 mb-5 md:mb-0">
                     <span class="font-orbitron text-[#00eaff] text-sm">TARKASCIENCE</span> 
-                    <span class="text-[11px] tracking-widest">RESEARCH ARCHIVES</span>
+                    <span class="text-[11px] tracking-widest">OFFICIAL WEBSITE</span>
                 </div>
                 
                 <div class="font-mono text-xs">© <span id="year"></span> TarkaScience — Educational use.All papers are public domain or CC-BY 4.0.</div>
@@ -560,6 +585,13 @@
 
 
                 <div class="flex items-center gap-4">
+                    <!-- 🌙 Reading Mode Toggle -->
+                    <button id="readingModeBtn"
+                        onclick="toggleReadingMode()"
+                        class="px-4 py-2 text-xs border border-[#7a6bff] text-[#7a6bff] hover:bg-[#7a6bff] hover:text-white rounded-full">
+                        🌙 READING MODE
+                    </button>
+
                     <button id="pdfDownloadBtn"
                         class="px-4 py-2 text-xs border border-[#00eaff] text-[#00eaff] hover:bg-[#00eaff] hover:text-black rounded-full cursor-pointer">
                         DOWNLOAD PDF
@@ -567,6 +599,7 @@
 
                     <button onclick="closePDF()"
                         class="text-white text-xl hover:text-[#00eaff]">✕</button>
+
                 </div>
             </div>
 
@@ -974,6 +1007,7 @@
         let readingSeconds = 0;
 
         function openPDF(id) {
+            localStorage.setItem("lastPaperOpened", id);
             const paper = allPapers.find(p => p.id === id);
             if (!paper) return;
 
@@ -1004,7 +1038,6 @@
                 updateReadingTimer();
             }, 1000);
 
-
             // ⭐ FAKE SMART READING PROGRESS
             let progress = 0;
             const bar = document.getElementById("pdfProgressBar");
@@ -1030,7 +1063,10 @@
             document.getElementById("pdfProgressBar").style.width = "0%";
             document.body.style.overflow = "auto";
             clearInterval(pdfProgressInterval);
-            clearInterval(readingInterval); // NEW
+            clearInterval(readingInterval);
+            document.body.classList.remove("reading-mode");
+            readingMode = false;
+            document.getElementById("readingModeBtn").textContent = "🌙 READING MODE";
         }
         
         // Filter papers by category
@@ -1112,7 +1148,7 @@
                     <div class="mb-6 h-px w-6 bg-[#00eaff]"></div>
                     <div class="font-orbitron text-[#00eaff] text-xl mb-1 tracking-widest">01</div>
                     <h4 class="font-orbitron text-xl tracking-[-0.005em] mb-4">Transparency</h4>
-                    <p class="text-[#8894cc] text-sm leading-relaxed flex-1">Nothing is hidden behind paywalls or “supplementary material” links. Every number, graph, and dataset used in the videos is here.</p>
+                    <p class="text-[#8894cc] text-sm leading-relaxed flex-1">Every research paper and scientific source used in TarkaScience videos is collected here in one place. Nothing is hidden behind paywalls or missing references.</p>
                     
                     <div class="mt-auto text-[11px] text-[#5bbcff] font-mono pt-6 border-t border-[#00eaff]/10">500+ verified sources</div>
                 </div>
@@ -1121,8 +1157,8 @@
                 <div id="why-card-2" class="glass-card bg-[#0f182f]/70 border border-[#7a6bff]/30 rounded-3xl p-7 pb-9 h-full flex flex-col transition-all hover:border-[#7a6bff]">
                     <div class="mb-6 h-px w-6 bg-[#7a6bff]"></div>
                     <div class="font-orbitron text-[#7a6bff] text-xl mb-1 tracking-widest">02</div>
-                    <h4 class="font-orbitron text-xl tracking-[-0.005em] mb-4">Curiosity Engine</h4>
-                    <p class="text-[#8894cc] text-sm leading-relaxed flex-1">This library is not an afterthought. It is the reason the channel exists. We find the paper first — then film the story.</p>
+                    <h4 class="font-orbitron text-xl tracking-[-0.005em] mb-4">Central Knowledge Hub</h4>
+                    <p class="text-[#8894cc] text-sm leading-relaxed flex-1">This website acts as the central hub of TarkaScience where viewers can explore the research behind the videos and dive deeper into the science.</p>
                     
                     <div class="mt-auto text-[11px] text-[#5bbcff] font-mono pt-6 border-t border-[#7a6bff]/10">16 videos • 0 filler</div>
                 </div>
@@ -1131,8 +1167,8 @@
                 <div id="why-card-3" class="glass-card bg-[#0f182f]/70 border border-[#00eaff]/30 rounded-3xl p-7 pb-9 h-full flex flex-col transition-all hover:border-[#00eaff]">
                     <div class="mb-6 h-px w-6 bg-[#00eaff]"></div>
                     <div class="font-orbitron text-[#00eaff] text-xl mb-1 tracking-widest">03</div>
-                    <h4 class="font-orbitron text-xl tracking-[-0.005em] mb-4">Free Forever</h4>
-                    <p class="text-[#8894cc] text-sm leading-relaxed flex-1">No login. No newsletter. No “unlock full PDF”. Download anything, annotate, share, fork — it belongs to humanity now.</p>
+                    <h4 class="font-orbitron text-xl tracking-[-0.005em] mb-4">Free Learning</h4>
+                    <p class="text-[#8894cc] text-sm leading-relaxed flex-1">All papers are shared freely for students, learners and curious minds so anyone can continue learning beyond the videos.</p>
                     
                     <div class="mt-auto text-xs bg-[#00eaff]/10 text-[#00eaff] font-medium inline-block px-4 py-px rounded mt-6">CC-BY + PD</div>
                 </div>
@@ -1461,6 +1497,17 @@
                 image: "thumbnails/pulsar.png",
                 readTime: "60 min"
             });
+
+            allPapers.push({
+                id: 17,
+                title: "The Milky Way Secrets",
+                desc: "The Milky Way is a barred spiral galaxy containing over 200 billion stars, a massive central black hole (Sagittarius A*), and an enormous, invisible dark matter halo. Recent discoveries reveal it is a 'galactic cannibal' that has merged with at least six smaller galaxies, has a warped, twisting disc, and features a 'skeleton' of dense gas clouds. ",
+                date: "2026.02.13",
+                category: "Universe",
+                file: "papers/Milky_Way_ Secrets.pdf",
+                image: "thumbnails/Milky_Way_Secrets.png",
+                readTime: "60 min"
+            });
         }
         
         // Initialize everything
@@ -1585,7 +1632,29 @@
             document.getElementById("statReadTime").textContent = hours + "h";
         }
 
+        /* ===============================
+        🌙 READING MODE
+        =============================== */
+
+        let readingMode = false;
+
+        function toggleReadingMode(){
+
+            readingMode = !readingMode;
+
+            const btn = document.getElementById("readingModeBtn");
+
+            if(readingMode){
+                document.body.classList.add("reading-mode");
+                btn.textContent = "☀ EXIT READING";
+            }else{
+                document.body.classList.remove("reading-mode");
+                btn.textContent = "🌙 READING MODE";
+            }
+        }
+
         window.onload = () => {
+
             // Canvas setup
             canvas = document.getElementById("bgCanvas");
             ctx = canvas.getContext("2d", { alpha: true });
@@ -1615,7 +1684,7 @@
             updatePaperCounter();
             initLatestPaperBanner();
             renderSavedPapers();   
-            updateResearchStats(); //  NEW
+            updateResearchStats();
             
             // Clock
             updateClock();
@@ -1698,14 +1767,20 @@
                 showToast("TarkaScience Observatory synchronized • Papers unlocked");
             }, 1250);
             
-            console.log("%cWelcome to the TarkaScience Research Library.\nEverything you see here is open source.\nDownload. Cite. Repeat.", 
-                "color:#00eaff;font-weight:500;font-size:13px");
+            console.log(`Welcome researcher.All knowledge here is free.Download. Cite. Repeat.`);
             // Close PDF if user clicks background
             document.getElementById("pdfModal").addEventListener("click", function(e){
                 if (e.target === this) closePDF();
             });
 
             initScholarScene();
+
+            setTimeout(()=>{
+                const loader = document.getElementById("loader");
+                loader.style.transition = "opacity 0.6s ease";
+                loader.style.opacity="0";
+                document.getElementById("loader").style.pointerEvents="none";
+            },800);
         }
     </script>
 </body>
