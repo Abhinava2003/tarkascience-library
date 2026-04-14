@@ -7,7 +7,6 @@
     <meta name="description" content="Official website of TarkaScience. Explore research papers, scientific sources and tools behind the videos. 100% free and open access.">
 
     <link rel="preload" as="document" href="papers/Galaxy_formation.pdf">
-
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- ⭐ THIS WAS MISSING -->
@@ -61,6 +60,146 @@
     color:#8894cc;
     margin-top:4px;
     letter-spacing:1px;
+}
+/* ⚡ 3D ELECTRIC ENERGY RING */
+.energy-ring {
+    position: absolute;
+    inset: -14px;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.energy-ring::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    
+    background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        #00eaff 10%,
+        transparent 25%,
+        #7a6bff 40%,
+        transparent 55%,
+        #00eaff 70%,
+        transparent 85%
+    );
+
+    filter: blur(2px) brightness(1.8);
+    animation: rotateEnergy 4s linear infinite reverse; /* anticlockwise */
+}
+
+/* glowing outer aura */
+.energy-ring::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,234,255,0.2);
+    box-shadow:
+        0 0 25px #00eaff,
+        0 0 45px #7a6bff,
+        inset 0 0 20px rgba(0,234,255,0.3);
+}
+
+/* rotation */
+@keyframes rotateEnergy {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(-360deg); /* anticlockwise */
+    }
+}
+
+/* ⚡ YOUTUBE ELECTRIC FRAME (RECTANGLE) */
+
+.yt-electric-frame {
+    position: absolute;
+    inset: -10px;
+    border-radius: 16px;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* rotating energy border */
+.yt-electric-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+
+    background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        #00ff9f 10%,
+        transparent 25%,
+        #00eaff 40%,
+        transparent 55%,
+        #7a6bff 70%,
+        transparent 85%
+    );
+
+    filter: blur(2px) brightness(2);
+    animation: ytFrameRotate 3s linear infinite;
+}
+
+/* outer glow + lightning flicker */
+.yt-electric-frame::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 18px;
+
+    box-shadow:
+        0 0 20px #00ff9f,
+        0 0 40px #00eaff,
+        0 0 60px rgba(0,255,200,0.6),
+        inset 0 0 20px rgba(0,255,200,0.4);
+
+    animation: ytElectricFlicker 1.2s infinite alternate;
+}
+
+/* rotation */
+@keyframes ytFrameRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* lightning flicker */
+@keyframes ytElectricFlicker {
+    0%   { opacity: 0.6; transform: scale(1); }
+    50%  { opacity: 1; transform: scale(1.02); }
+    100% { opacity: 0.8; transform: scale(1.01); }
+}
+
+/* 🔥 CHAT BUBBLES */
+#chatBox::-webkit-scrollbar {
+    width: 3px;
+}
+#chatBox::-webkit-scrollbar-thumb {
+    background: #00ff9f;
+}
+.chat-user {
+    color: #00eaff;
+    text-align: right;
+}
+
+.chat-ai {
+    color: #00ff9f;
+    text-align: left;
+}
+
+/* typing effect */
+.typing::after {
+    content: "...";
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%,100% { opacity: 0.2; }
+    50% { opacity: 1; }
 }
 </style>
 
@@ -244,7 +383,7 @@
                     <button onclick="filterCategory('Physics')" id="cat-Physics"
                         class="category-btn px-4 py-1 text-[#8894cc] hover:text-[#b9c2ff]">PHYSICS</button>
                     <button onclick="filterCategory('Quantum')" id="cat-Quantum"
-                        class="category-btn px-4 py-1 text-[#8894cc] hover:text-[#b9c2ff]">QUANTUM MECHANICS</button>
+                        class="category-btn px-4 py-1 text-[#8894cc] hover:text-[#b9c2ff]">QUANTUM MECHANICS</button>    
                 </div>
             </div>
         </div>
@@ -373,6 +512,7 @@
                             
                             <!-- Neon ring overlay -->
                             <div class="absolute inset-0 border border-[#00eaff] rounded-full scale-110 opacity-50"></div>
+                            <div class="energy-ring"></div>
                         </div>
                     </div>
                     
@@ -408,7 +548,7 @@
                             </div>
                             <div>
                                 <div class="text-xs text-[#8894cc] tracking-widest">VIDEOS SUPPORTED</div>
-                                <div class="font-orbitron text-3xl text-[#00eaff] tracking-tighter">38</div>
+                                <div class="font-orbitron text-3xl text-[#00eaff] tracking-tighter">39</div>
                             </div>
                             <div>
                                 <div class="text-xs text-[#8894cc] tracking-widest">CITATIONS</div>
@@ -608,17 +748,92 @@
                 class="absolute top-16 left-0 h-[2px] bg-[#00eaff] w-0 transition-all duration-150">
             </div>
 
-            <!-- PDF Frame -->
-            <iframe id="pdfFrame"
-                class="absolute top-16 left-0 w-full h-[calc(100%-64px)] bg-black">
-            </iframe>
+            <!-- 🎥 VIDEO + PDF SPLIT VIEW -->
+            <div class="absolute top-16 left-0 w-full h-[calc(100%-64px)] flex">
+
+                <!-- 📄 PDF SIDE -->
+                <iframe id="pdfFrame"
+                    class="w-2/3 h-full bg-black border-r border-[#00eaff]/20">
+                </iframe>
+
+                <!-- 🎬 VIDEO SIDE -->
+                <div class="w-1/3 h-full relative bg-black flex flex-col gap-3 p-3">
+
+                    <!-- 🎥 YOUTUBE (TOP) -->
+                    <div class="relative w-full h-[45%] flex items-center justify-center rounded-xl overflow-hidden">
+
+                        <div class="yt-electric-frame"></div>
+
+                        <iframe id="ytPlayer"
+                            class="w-full h-full relative z-10 rounded-xl"
+                            src=""
+                            allow="autoplay; encrypted-media"
+                            allowfullscreen
+                            enablejsapi="1">
+                        </iframe>
+                    </div>
+
+                    <!-- 💬 CHAT PANEL (MIDDLE) -->
+                    <div class="relative h-[30%] bg-[#050816] border border-[#00eaff]/30 rounded-2xl p-3 overflow-hidden flex flex-col">
+
+                        <!-- glow -->
+                        <div class="absolute inset-0 rounded-2xl pointer-events-none"
+                            style="box-shadow: 0 0 15px #00ff9f;"></div>
+
+                        <div class="text-[10px] text-[#00ff9f] mb-1 tracking-widest">
+                            CONTROL INTERFACE
+                        </div>
+
+                        <!-- messages -->
+                        <div id="chatBox"
+                            class="flex-1 overflow-y-auto text-[11px] font-mono space-y-1 pr-1">
+                        </div>
+
+                        <!-- input -->
+                        <input id="commandBox"
+                            type="text"
+                            placeholder="Ask anything about the universe..."
+                            class="mt-2 bg-[#0a1030] border border-[#00ff9f]/40 px-2 py-1 text-[11px] rounded focus:outline-none focus:shadow-[0_0_10px_#00ff9f]">
+                    </div>
+
+                    <!-- 🧠 TOOLS PANEL (BOTTOM) -->
+                    <div class="h-[25%] flex flex-col gap-2">
+
+                        <!-- ⚡ COMMAND GUIDE -->
+                        <div class="text-[9px] text-[#5bbcff] leading-tight px-1">
+                            play • pause • forward 30 • back 10
+                        </div>
+
+                        <!-- 🧮 TIME CALCULATOR -->
+                        <div class="flex-1 bg-[#0a1030] border border-[#7a6bff]/30 rounded-xl p-2 flex flex-col justify-between">
+
+                            <div class="text-[9px] text-[#7a6bff]">TIME CALCULATOR</div>
+
+                            <input id="timeInput"
+                                type="text"
+                                placeholder="2 or 2:30"
+                                class="bg-transparent border border-[#00eaff]/20 px-2 py-1 text-[11px] rounded focus:outline-none">
+
+                            <button onclick="convertTime()"
+                                class="text-[10px] border border-[#00eaff] text-[#00eaff] rounded py-1 hover:bg-[#00eaff] hover:text-black transition">
+                                CONVERT
+                            </button>
+
+                            <div id="timeResult"
+                                class="text-[10px] text-[#00ff9f] text-center">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
 
         </div>
 
     </footer>
 
     <script>
-        // Tailwind script already injected via CDN
         
         // Sample paper data
         let allPapers = [
@@ -630,7 +845,8 @@
                 category: "Universe",
                 file: "papers/Galaxy_formation.pdf",
                 image: "thumbnails/galaxy_formation.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "fp0lsW3j5y8"
             },
             {
                 id: 2,
@@ -640,7 +856,8 @@
                 category: "Universe",
                 file: "papers/Light_bending.pdf",
                 image: "thumbnails/light_bending.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId : "zR6fNdHqO_M"
             },
             {
                 id: 3,
@@ -650,9 +867,73 @@
                 category: "Universe",
                 file: "papers/The_Expanding_Cosmos.pdf",
                 image: "thumbnails/Expanding_Universe.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId : "SjyQil5HbOY"
             }
         ];
+
+        /* ===============================
+        🤖 FAKE AI KNOWLEDGE ENGINE
+        =============================== */
+
+        const AI_TOPICS = {
+
+            "black hole": "A black hole is a region of spacetime where gravity is so strong that nothing—not even light—can escape. It forms when massive stars collapse.",
+
+            "dark matter": "Dark matter is an invisible form of matter that does not emit light but has gravitational effects. It holds galaxies together.",
+
+            "multiverse": "The multiverse is a theory suggesting that our universe is just one of many universes, each possibly having different physical laws.",
+
+            "quantum entanglement": "Quantum entanglement is a phenomenon where two particles become linked, and the state of one instantly affects the other, no matter the distance.",
+
+            "bell theorem": "Bell’s Theorem proves that quantum mechanics cannot be explained by hidden local variables. It supports the idea that reality is non-local.",
+
+            "gravitational waves": "Gravitational waves are ripples in spacetime caused by massive objects like merging black holes.",
+
+            "many worlds": "Many Worlds Interpretation suggests that all possible outcomes of quantum events actually happen in different parallel universes.",
+
+            "quantum teleportation": "Quantum teleportation transfers quantum information from one particle to another instantly using entanglement.",
+
+            "hawking radiation": "Hawking radiation is theoretical radiation emitted by black holes, causing them to slowly evaporate.",
+
+            "measurement problem": "The measurement problem questions how and why quantum states collapse into a single reality when observed.",
+
+            "gamma ray bursts": "Gamma ray bursts are the most powerful explosions in the universe, releasing massive energy in seconds.",
+
+            "uncertainty principle": "Heisenberg’s Uncertainty Principle states that you cannot know both position and momentum exactly at the same time.",
+
+            "wave function": "A wave function describes the probability of a particle’s state in quantum mechanics.",
+
+            "fermi paradox": "The Fermi Paradox asks: If the universe is full of stars, why haven’t we found alien life?",
+
+            "big bang": "The Big Bang theory explains that the universe began from a hot dense state and has been expanding ever since.",
+
+            "time dilation": "Time dilation means time moves slower for objects moving at high speed or under strong gravity.",
+
+            "wormhole": "A wormhole is a theoretical shortcut connecting two distant points in spacetime.",
+
+            "dark energy": "Dark energy is a mysterious force causing the accelerated expansion of the universe.",
+
+            "supernova": "A supernova is a massive explosion of a dying star, often outshining entire galaxies.",
+
+            "neutron star": "A neutron star is an extremely dense stellar remnant made mostly of neutrons.",
+
+            "pulsar": "A pulsar is a rotating neutron star emitting beams of radiation like a lighthouse.",
+
+            "milky way": "The Milky Way is our home galaxy containing billions of stars and a supermassive black hole.",
+
+            "white hole": "A white hole is the theoretical opposite of a black hole, ejecting matter instead of absorbing it.",
+
+            "double slit": "The double-slit experiment shows that particles behave like waves until observed.",
+
+            "twin paradox": "Twin paradox shows that a fast-traveling twin ages slower than one on Earth due to relativity."
+        };
+
+        /* ===============================
+        🧠 AI MEMORY SYSTEM
+        =============================== */
+
+        let pendingAction = null; // stores action waiting for confirmation
         
         let displayedPapers = 3;
         const PAPERS_PER_LOAD = 3;
@@ -1053,6 +1334,15 @@
             }, 800);
 
             document.body.style.overflow = "hidden";
+
+            // 🎬 SET YOUTUBE VIDEO (CHANGE VIDEO ID HERE)
+            const yt = document.getElementById("ytPlayer");
+
+            if (paper.videoId) {
+                yt.src = `https://www.youtube.com/embed/${paper.videoId}?enablejsapi=1&origin=${window.location.origin}`;
+            } else {
+                yt.src = ""; // fallback if no video
+            }
         }
 
 
@@ -1091,6 +1381,7 @@
 
             displayedPapers = filtered.length;
             renderPapers(filtered);
+            document.getElementById("loadMoreBtn").style.display = "block";
         }
         /* ===============================
         🔎 PAPER SEARCH ENGINE
@@ -1117,27 +1408,47 @@
         });
         
         //load more
-        function fakeLoadMore() {
-
-        const btn = document.getElementById("loadMoreBtn");
-
-        // Increase how many papers should be visible
-        displayedPapers += PAPERS_PER_LOAD;
-
-        // Slice only the needed papers
-        const papersToShow = allPapers.slice(0, displayedPapers);
-
-        // Render without duplicates
-        renderPapers(papersToShow);
-
-        // If all papers are shown → hide button
-        if (displayedPapers >= allPapers.length) {
-            btn.textContent = "✓ All papers loaded";
-            setTimeout(() => {
-                btn.style.display = "none";
-            }, 800);
+        function getPlayer() {
+            return document.getElementById("ytPlayer").contentWindow;
         }
-    }
+
+        // ▶ PLAY
+        function playVideo() {
+            getPlayer().postMessage(JSON.stringify({
+                event: "command",
+                func: "playVideo",
+                args: []
+            }), "*");
+        }
+
+        // ⏸ PAUSE
+        function pauseVideo() {
+            getPlayer().postMessage(JSON.stringify({
+                event: "command",
+                func: "pauseVideo",
+                args: []
+            }), "*");
+        }
+
+        // ⏩ SEEK
+        function seekVideo(seconds) {
+
+            const player = document.getElementById("ytPlayer").contentWindow;
+
+            // First get current time
+            player.postMessage(JSON.stringify({
+                event: "command",
+                func: "getCurrentTime"
+            }), "*");
+
+            // Then move relative (simple fallback)
+            player.postMessage(JSON.stringify({
+                event: "command",
+                func: "seekTo",
+                args: [seconds, true]
+            }), "*");
+        }
+    
 
         
         // Render "Why this exists" cards
@@ -1160,7 +1471,7 @@
                     <h4 class="font-orbitron text-xl tracking-[-0.005em] mb-4">Central Knowledge Hub</h4>
                     <p class="text-[#8894cc] text-sm leading-relaxed flex-1">This website acts as the central hub of TarkaScience where viewers can explore the research behind the videos and dive deeper into the science.</p>
                     
-                    <div class="mt-auto text-[11px] text-[#5bbcff] font-mono pt-6 border-t border-[#7a6bff]/10">38 videos • 0 filler</div>
+                    <div class="mt-auto text-[11px] text-[#5bbcff] font-mono pt-6 border-t border-[#7a6bff]/10">39 videos • 0 filler</div>
                 </div>
                 
                 <!-- Card 3 -->
@@ -1363,7 +1674,8 @@
                 category: "Physics",
                 file: "papers/Gravitational_Theory.pdf",
                 image: "thumbnails/gravitational_theory.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "4Yq5CPifDwo"
             });
             
             allPapers.push({
@@ -1374,7 +1686,8 @@
                 category: "Universe",
                 file: "papers/Quasar.pdf",
                 image: "thumbnails/quasar.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "PdAsU44O1Z0"
             });
 
             allPapers.push({
@@ -1385,7 +1698,8 @@
                 category: "Physics",
                 file: "papers/Time_dialation.pdf",
                 image: "thumbnails/time_dialation.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "jJze-MTC1G0"
             });
 
             allPapers.push({
@@ -1396,7 +1710,8 @@
                 category: "Universe",
                 file: "papers/Big_bang.pdf",
                 image: "thumbnails/big_bang.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "jKSp5hvQaeY"
             });
 
             allPapers.push({
@@ -1407,7 +1722,8 @@
                 category: "Physics",
                 file: "papers/Wave_particle.pdf",
                 image: "thumbnails/wave_particle_duality.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "oYDAAgHPJQU"
             });
 
             allPapers.push({
@@ -1418,7 +1734,8 @@
                 category: "Quantum",
                 file: "papers/Quantum_Superposition.pdf",
                 image: "thumbnails/quantam_superposition.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "9MiLM2-DuUk"
             });
 
             allPapers.push({
@@ -1429,7 +1746,8 @@
                 category: "Universe",
                 file: "papers/Wormholes.pdf",
                 image: "thumbnails/wormhole.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "mdjTBDRk5JI"
             });
 
             allPapers.push({
@@ -1440,7 +1758,8 @@
                 category: "Universe",
                 file: "papers/Dark_Matter.pdf",
                 image: "thumbnails/dark_matter.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "gXty3BBT-Zc"
             });
 
             allPapers.push({
@@ -1451,7 +1770,8 @@
                 category: "Universe",
                 file: "papers/Spacetime_Curvature.pdf",
                 image: "thumbnails/space_time_curvature.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "n2R3nAyVO64"
             });
 
             allPapers.push({
@@ -1462,7 +1782,8 @@
                 category: "Universe",
                 file: "papers/The_Dark_Energy_Enigma.pdf",
                 image: "thumbnails/dark_energy.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "akUoN8c15hk"
             });
 
             allPapers.push({
@@ -1473,7 +1794,8 @@
                 category: "Universe",
                 file: "papers/Supernova_Mechanisms.pdf",
                 image: "thumbnails/supernova.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "9M4bPrdOuJQ"
             });
 
             allPapers.push({
@@ -1484,7 +1806,8 @@
                 category: "Universe",
                 file: "papers/The_Neutron_Star.pdf",
                 image: "thumbnails/neutron_star.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "xhO_1p9iopQ"
             });
 
             allPapers.push({
@@ -1495,7 +1818,8 @@
                 category: "Universe",
                 file: "papers/The_Pulsar_Paradigm.pdf",
                 image: "thumbnails/pulsar.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "q5czOTABXY4"
             });
 
             allPapers.push({
@@ -1504,9 +1828,10 @@
                 desc: "The Milky Way is a barred spiral galaxy containing over 200 billion stars, a massive central black hole (Sagittarius A*), and an enormous, invisible dark matter halo. Recent discoveries reveal it is a 'galactic cannibal' that has merged with at least six smaller galaxies, has a warped, twisting disc, and features a 'skeleton' of dense gas clouds. ",
                 date: "2026.02.13",
                 category: "Universe",
-                file: "papers/Milky_Way_ Secrets.pdf",
+                file: "papers/Milky_Way_Secrets.pdf",
                 image: "thumbnails/Milky_Way_Secrets.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "89Vr-RHTsUQ"
             });
 
             allPapers.push({
@@ -1517,7 +1842,8 @@
                 category: "Universe",
                 file: "papers/White_hole.pdf",
                 image: "thumbnails/White_hole.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "mV1ivH-Re9Q"
             });
 
             allPapers.push({
@@ -1528,7 +1854,8 @@
                 category: "Quantum",
                 file: "papers/The_Quantum_Fabric.pdf",
                 image: "thumbnails/Quantum_entanglement.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "U_4eOYTH7sU"
             });
 
             allPapers.push({
@@ -1539,7 +1866,8 @@
                 category: "Quantum",
                 file: "papers/The_Uncertainty_Principle.pdf",
                 image: "thumbnails/Uncertainty_principle.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "bHi8mYhARhA"
             });
 
             allPapers.push({
@@ -1548,9 +1876,10 @@
                 desc: "Schrödinger’s Cat is a thought experiment where a cat inside a sealed box is both alive and dead at the same time until it is observed.Schrödinger’s Cat is a thought experiment where a cat inside a sealed box is both alive and dead at the same time until it is observed.",
                 date: "2026.03.16",
                 category: "Quantum",
-                file: "papers/The_Schrödinger's_Cat.pdf",
+                file: "papers/The_Schrodingers_Cat.pdf",
                 image: "thumbnails/The_Schrödinger's_Cat.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "9cH6G4ahmKo"
             });
 
              allPapers.push({
@@ -1561,7 +1890,8 @@
                 category: "Quantum",
                 file: "papers/The_Double_Slit_Experiment.pdf",
                 image: "thumbnails/The_Double_Slit_Experiment.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "qXuegcAZuW4"
             });
 
             allPapers.push({
@@ -1572,7 +1902,8 @@
                 category: "Universe",
                 file: "papers/The_Twin_Paradox.pdf",
                 image: "thumbnails/Twin_Paradox.png",
-                readTime: "60 min"
+                readTime: "60 min",
+                videoId: "FQSXXfjZ2OI"
             });
         }
         
@@ -1719,6 +2050,312 @@
             }
         }
 
+
+
+        /* ===============================
+        🤖 COMMAND BOX (SMART CONTROL)
+        =============================== */
+
+        document.addEventListener("keydown", function(e){
+
+            const input = document.getElementById("commandBox");
+
+            if (!input) return;
+
+            // Only trigger when input is focused + Enter pressed
+            if (e.key === "Enter" && document.activeElement === input) {
+
+                const command = input.value.toLowerCase().trim();
+                handleCommand(command);
+
+                input.value = ""; // clear after execution
+            }
+        });
+
+        function handleCommand(cmd){
+
+            if (!cmd) return;
+
+            addMessage("> " + cmd, "user");
+
+            cmd = cmd.toLowerCase().trim();
+
+            /* ===============================
+            🧠 1. GREETING SYSTEM
+            =============================== */
+            if (["hi", "hello", "hey"].includes(cmd)) {
+
+                let reply = "";
+
+                if (cmd === "hello") reply = "Hello sir 👋";
+                if (cmd === "hi") reply = "Hi sir 👋";
+                if (cmd === "hey") reply = "Hey mister 😎";
+
+                aiReply(reply);
+                return;
+            }
+
+            /* ===============================
+            🙏 THANK YOU RESPONSE
+            =============================== */
+
+            if (cmd.includes("thank")) {
+                aiReply("Welcome sir 😊.Any other Question??");
+                return;
+            }
+
+            /* ===============================
+            🧠 2. DATE & TIME
+            =============================== */
+            if (cmd.includes("time") || cmd.includes("date")) {
+
+                const now = new Date();
+
+                const time = now.toLocaleTimeString();
+                const date = now.toDateString();
+
+                aiReply(`📅 ${date} \n⏰ ${time}`);
+                return;
+            }
+
+            /* ===============================
+            🧠 3. YES / NO CONFIRMATION SYSTEM
+            =============================== */
+            if (pendingAction) {
+
+                    if (isYes(cmd)) {
+                        executeAction(pendingAction);
+                        pendingAction = null;
+                        return;
+                    }
+
+                    if (isNo(cmd)) {
+                        aiReply("❌ Action cancelled.");
+                        pendingAction = null;
+                        return;
+                    }
+                }
+            
+
+            /* ===============================
+            🧠 5. TOPIC SEARCH (AI KNOWLEDGE)
+            =============================== */
+
+            for (let key in AI_TOPICS) {
+                if (cmd.includes(key)) {
+                    aiReply(AI_TOPICS[key]);
+                    return;
+                }
+            }
+
+            /* ===============================
+            🧠 4. VIDEO COMMAND MATCH (FUZZY)
+            =============================== */
+
+            const actions = ["play", "pause", "forward", "back"];
+
+            let matched = actions.find(action => cmd.includes(action));
+
+            // ❗ if not exact → check fuzzy
+            if (!matched) {
+
+                actions.forEach(action => {
+                    if (similar(cmd, action)) {
+                        matched = action;
+                    }
+                });
+            }
+
+            if (matched) {
+
+                // If exact → run directly
+                if (cmd.includes(matched)) {
+                    executeAction(matched);
+                } 
+                else {
+                    // If fuzzy → ask confirmation
+                    pendingAction = matched;
+                    aiReply(`Did you mean "${matched}" ?`);
+                }
+
+                return;
+            }
+
+            /* ===============================
+            🧠 6. DEFAULT RESPONSE
+            =============================== */
+
+            aiReply("Sorry sir, I don't know about it.");
+        }
+
+        /* ===============================
+        🔍 SIMILARITY CHECK (SPELLING FIX)
+        =============================== */
+
+        function similar(input, target) {
+            input = input.toLowerCase();
+            target = target.toLowerCase();
+
+            let match = 0;
+            for (let char of target) {
+                if (input.includes(char)) match++;
+            }
+            return match >= target.length / 2;
+        }
+
+        /* ===============================
+        ✅ SMART YES DETECTION
+        =============================== */
+
+        function isYes(input) {
+
+            input = input.toLowerCase();
+
+            const yesWords = ["yes", "ok", "okay", "y", "yeah", "yep"];
+
+            if (yesWords.includes(input)) return true;
+
+            // fuzzy match
+            return similar(input, "yes");
+        }
+
+        /* ===============================
+        ❌ SMART NO DETECTION
+        =============================== */
+
+        function isNo(input) {
+
+            input = input.toLowerCase();
+
+            const noWords = ["no", "nope", "never", "n"];
+
+            if (noWords.includes(input)) return true;
+
+            // fuzzy match
+            return similar(input, "no");
+        }
+
+        /* ===============================
+        🎬 ACTION EXECUTOR
+        =============================== */
+
+        function executeAction(action){
+
+            if (action === "play"){
+                playVideo();
+                aiReply("▶ Video playing...");
+            }
+
+            else if (action === "pause"){
+                pauseVideo();
+                aiReply("⏸ Video paused.");
+            }
+
+            else if (action === "forward"){
+                seekVideo(10);
+                aiReply("⏩ Forward 10 seconds");
+            }
+
+            else if (action === "back"){
+                seekVideo(-10);
+                aiReply("⏪ Back 10 seconds");
+            }
+        }
+
+
+        function fakeLoadMore() {
+
+            // Increase how many papers to show
+            displayedPapers += PAPERS_PER_LOAD;
+
+            // Limit to total papers
+            if (displayedPapers > allPapers.length) {
+                displayedPapers = allPapers.length;
+            }
+
+            // Re-render papers
+            renderPapers(allPapers.slice(0, displayedPapers));
+
+            // Hide button if all loaded
+            if (displayedPapers >= allPapers.length) {
+                document.getElementById("loadMoreBtn").style.display = "none";
+            }
+        }
+
+        function convertTime() {
+
+            const input = document.getElementById("timeInput").value.trim();
+            const output = document.getElementById("timeResult");
+
+            if (!input) {
+                output.textContent = "Enter value first";
+                return;
+            }
+
+            let seconds = 0;
+
+            // Case 1: mm:ss format
+            if (input.includes(":")) {
+                const parts = input.split(":");
+
+                if (parts.length !== 2) {
+                    output.textContent = "Invalid format";
+                    return;
+                }
+
+                const min = parseInt(parts[0]);
+                const sec = parseInt(parts[1]);
+
+                if (isNaN(min) || isNaN(sec)) {
+                    output.textContent = "Invalid numbers";
+                    return;
+                }
+
+                seconds = (min * 60) + sec;
+            } 
+            // Case 2: minutes only
+            else {
+                const min = parseFloat(input);
+
+                if (isNaN(min)) {
+                    output.textContent = "Invalid number";
+                    return;
+                }
+
+                seconds = Math.floor(min * 60);
+            }
+
+            output.textContent = `${seconds} seconds`;
+        }
+
+        function addMessage(text, type = "ai") {
+            const box = document.getElementById("chatBox");
+
+            const msg = document.createElement("div");
+            msg.className = type === "user" ? "chat-user" : "chat-ai";
+
+            msg.textContent = text;
+
+            box.appendChild(msg);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function aiReply(text) {
+            const box = document.getElementById("chatBox");
+
+            const typing = document.createElement("div");
+            typing.className = "chat-ai typing";
+            typing.textContent = "Initiating";
+
+            box.appendChild(typing);
+            box.scrollTop = box.scrollHeight;
+
+            setTimeout(() => {
+                typing.remove();
+                addMessage(text, "ai");
+            }, 800);
+        }
+
         window.onload = () => {
 
             // Canvas setup
@@ -1732,7 +2369,7 @@
             });
             
             // Populate stars
-            const STAR_COUNT = window.innerWidth < 768 ? 60 : 110;
+            const STAR_COUNT = window.innerWidth < 768 ? 40 : 80;
 
             for (let i = 0; i < STAR_COUNT; i++) {
                 particles.push(new Star());
@@ -1851,6 +2488,3 @@
     </script>
 </body>
 </html>
-
-
-
