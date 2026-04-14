@@ -11,6 +11,31 @@
 
 <link rel="icon" href="favicon/favicon.ico">
 
+<style>
+/* glow text */
+.glow-text{
+    text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff;
+}
+
+/* section fade animation */
+.fade-up{
+    opacity:0;
+    transform:translateY(40px);
+    transition: all 0.8s ease;
+}
+.fade-up.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* subtle card */
+.glass{
+    background: rgba(10,16,48,0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0,234,255,0.2);
+    border-radius: 20px;
+}
+</style>
 </head>
 
 <body class="bg-[#03040a] text-white font-sans">
@@ -32,7 +57,7 @@
 <!-- HERO -->
 <section class="pt-36 pb-20 text-center">
 
-<h1 class="font-orbitron text-[6rem] leading-none">
+<h1 class="font-orbitron text-[6rem] leading-none glow-text">
 ABOUT<br><span class="text-[#00eaff]">TARKASCIENCE</span>
 </h1>
 
@@ -42,8 +67,27 @@ Why this project exists and what it aims to achieve.
 
 </section>
 
+<section class="py-20">
+<div class="max-w-5xl mx-auto px-6 text-center glass p-10">
+
+<h2 class="font-orbitron text-3xl text-[#00eaff] mb-4">
+The Mind Behind TarkaScience
+</h2>
+
+<p class="text-[#b9c2ff] leading-relaxed">
+Created by <span class="text-[#00eaff] font-semibold">Abhinava Chakraborty</span>, 
+TarkaScience is built with the vision of making complex scientific ideas simple, visual and deeply engaging.
+</p>
+
+<p class="text-[#8894cc] mt-4 text-sm">
+Blending storytelling, physics, and cinematic thinking to make science feel alive.
+</p>
+
+</div>
+</section>
+
 <!-- STORY -->
-<section class="py-20 bg-[#070b1f]">
+<section class="py-20 bg-[#070b1f] fade-up">
 <div class="max-w-5xl mx-auto px-6">
 
 <h2 class="font-orbitron text-4xl mb-10 text-[#00eaff]">
@@ -66,7 +110,7 @@ The goal is not just to share facts, but to spark curiosity and inspire people t
 </section>
 
 <!-- MISSION -->
-<section class="py-20">
+<section class="py-20 bg-[#070b1f] fade-up">
 <div class="max-w-5xl mx-auto px-6">
 
 <h2 class="font-orbitron text-4xl mb-10 text-[#7a6bff]">
@@ -85,7 +129,7 @@ Every TarkaScience video is based on real research and verified scientific sourc
 </section>
 
 <!-- VISION -->
-<section class="py-20 bg-[#070b1f]">
+<section class="py-20 bg-[#070b1f] fade-up">
 <div class="max-w-5xl mx-auto px-6">
 
 <h2 class="font-orbitron text-4xl mb-10 text-[#00eaff]">
@@ -102,6 +146,32 @@ Vision
 </div>
 </section>
 
+<section class="py-20">
+<div class="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+
+<div class="glass p-6">
+<div class="text-3xl text-[#00eaff] font-orbitron">50+</div>
+<div class="text-xs text-[#8894cc]">Research Papers</div>
+</div>
+
+<div class="glass p-6">
+<div class="text-3xl text-[#00eaff] font-orbitron">40+</div>
+<div class="text-xs text-[#8894cc]">Videos</div>
+</div>
+
+<div class="glass p-6">
+<div class="text-3xl text-[#00eaff] font-orbitron">100%</div>
+<div class="text-xs text-[#8894cc]">Free Learning</div>
+</div>
+
+<div class="glass p-6">
+<div class="text-3xl text-[#00eaff] font-orbitron">∞</div>
+<div class="text-xs text-[#8894cc]">Curiosity</div>
+</div>
+
+</div>
+</section>
+
 <!-- CTA -->
 <section class="py-20 text-center">
 <a href="https://www.youtube.com/@tarka_science" target="_blank"
@@ -109,6 +179,24 @@ class="px-10 py-5 bg-[#00eaff] text-black rounded-xl font-bold">
 VISIT YOUTUBE CHANNEL
 </a>
 </section>
+
+<script>
+const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+        if(entry.isIntersecting){
+            entry.target.classList.add("show");
+        }
+    });
+});
+
+document.querySelectorAll(".fade-up").forEach(el=>{
+    observer.observe(el);
+});
+</script>
+
+<footer class="bg-black py-10 border-t border-[#00eaff]/10 text-center text-xs text-[#5a678f]">
+© 2026 TarkaScience — Built for curious minds
+</footer>
 
 </body>
 </html>
