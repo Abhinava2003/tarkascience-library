@@ -25,6 +25,11 @@
     <meta name="keywords" content="cosmology, physics, quantum mechanics, research papers, science education">
 
 <style>
+
+canvas {
+    will-change: transform;
+}
+
 /* 🌙 READING MODE */
 .reading-mode #bgCanvas,
 .reading-mode #navbar,
@@ -222,13 +227,13 @@
     <div id="customCursor" 
          class="fixed w-8 h-8 pointer-events-none z-50 mix-blend-screen hidden lg:block">
         <div class="w-full h-full border border-[#00eaff] rounded-full relative">
-            <div class="absolute inset-0 bg-[#00eaff] rounded-full blur-xl opacity-30"></div>
+            <div class="absolute inset-0 bg-[#00eaff] rounded-full blur-md opacity-30"></div>
         </div>
     </div>
 
     <!-- NAVBAR -->
     <nav id="navbar" 
-         class="fixed top-0 left-0 right-0 z-40 bg-[#070b1f]/80 backdrop-blur-xl border-b border-[#00eaff]/10">
+         class="fixed top-0 left-0 right-0 z-40 bg-[#070b1f]/80 backdrop-blur-md border-b border-[#00eaff]/10">
         <div class="max-w-screen-2xl mx-auto px-8 py-5 flex items-center justify-between">
             <!-- Logo -->
             <div class="flex items-center gap-x-3">
@@ -264,7 +269,7 @@
     
     <!-- Mobile Menu -->
     <div id="mobileMenu" 
-         class="hidden md:hidden fixed top-[73px] left-0 right-0 bg-[#070b1f]/95 backdrop-blur-xl z-30 border-b border-[#00eaff]/10 py-6">
+         class="hidden md:hidden fixed top-[73px] left-0 right-0 bg-[#070b1f]/95 backdrop-blur-md z-30 border-b border-[#00eaff]/10 py-6">
         <div class="flex flex-col items-center gap-6 text-sm uppercase tracking-[0.065em]">
             <a href="#" data-page="home" class="nav-link-mobile text-[#b9c2ff] hover:text-[#00eaff]">HOME</a>
             <a href="#" data-page="papers" class="nav-link-mobile text-[#b9c2ff] hover:text-[#00eaff]">RESEARCH PAPERS</a>
@@ -328,7 +333,7 @@
         </div>
         <!-- ⭐ Latest Paper Banner -->
         <div id="latestPaperBanner"
-        class="mt-10 inline-flex items-center gap-3 px-6 py-3 bg-[#0a1030]/80 border border-[#00eaff]/30 rounded-full backdrop-blur-xl opacity-0 translate-y-6 transition-all duration-700">
+        class="mt-10 inline-flex items-center gap-3 px-6 py-3 bg-[#0a1030]/80 border border-[#00eaff]/30 rounded-full backdrop-blur-md opacity-0 translate-y-6 transition-all duration-700">
             <span class="text-[10px] tracking-widest text-[#7a6bff]">LATEST PAPER</span>
             <span id="latestPaperTitle" class="text-xs text-[#b9c2ff]"></span>
             <button id="latestPaperBtn"
@@ -494,7 +499,7 @@
             <div class="relative mx-auto max-w-4xl">
                 <!-- Glass card -->
                 <div id="masterCard"
-                     class="bg-[#0a1030]/80 backdrop-blur-3xl border border-[#00eaff]/30 rounded-3xl overflow-hidden shadow-[0_0_60px_-10px] shadow-[#00eaff]">
+                     class="bg-[#0a1030]/80 backdrop-blur-3xl border border-[#00eaff]/30 rounded-3xl overflow-hidden shadow-[0_0_30px_-10px] shadow-[#00eaff]">
                     
                     <!-- Avatar header -->
                     <div class="h-56 bg-black relative flex items-center justify-center overflow-hidden">
@@ -707,7 +712,7 @@
             </div>
         </div>
         <!-- PDF VIEWER MODAL -->
-        <div id="pdfModal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[99999] hidden">
+        <div id="pdfModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-[99999] hidden">
 
             <!-- Top Bar -->
             <div class="absolute top-0 left-0 right-0 h-16 bg-[#070b1f] border-b border-[#00eaff]/20 flex items-center justify-between px-6">
@@ -1002,23 +1007,13 @@
                 ctx.fillStyle = "#e0f0ff";
                 
                 ctx.shadowColor = "#a0d8ff";
-                ctx.shadowBlur = 12;
+                ctx.shadowBlur = 6;
                 
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                 ctx.fill();
                 
                 // Cross glow for brightest stars
-                if (this.radius > 1.6) {
-                    ctx.strokeStyle = "#e0f0ff";
-                    ctx.lineWidth = 0.7;
-                    ctx.beginPath();
-                    ctx.moveTo(this.x - 6, this.y);
-                    ctx.lineTo(this.x + 6, this.y);
-                    ctx.moveTo(this.x, this.y - 6);
-                    ctx.lineTo(this.x, this.y + 6);
-                    ctx.stroke();
-                }
                 ctx.restore();
             }
         }
@@ -1078,15 +1073,24 @@
         
         // Render canvas
         let lastFrameTime = 0;
-        const FPS = 30;
-        const frameDelay = 1000 / FPS;
+        let FPS = 30;
 
         function animateCanvas(timestamp = 0) {
+
+            // 🔥 Reduce FPS on low devices
+            if (window.innerWidth < 768) FPS = 20;
+
+            const frameDelay = 1000 / FPS;
+
             if (timestamp - lastFrameTime < frameDelay) {
                 requestAnimationFrame(animateCanvas);
                 return;
             }
+
             lastFrameTime = timestamp;
+
+            // ❌ STOP if tab inactive
+            if (document.hidden) return;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -1111,7 +1115,9 @@
             
             // Re-create stars to match new dimensions
             particles = [];
-            for (let i = 0; i < 210; i++) {
+            const STAR_COUNT = window.innerWidth < 768 ? 40 : 90;
+
+            for (let i = 0; i < STAR_COUNT; i++) {
                 particles.push(new Star());
             }
             
@@ -1129,7 +1135,7 @@
                         <div class="relative h-56 overflow-hidden">
                             <img src="${paper.image}" 
                                  alt="${paper.title}"
-                                 class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                                 class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105" loading="lazy">
                             
                             <!-- Overlay glow -->
                             <div class="absolute inset-0 bg-gradient-to-t from-[#03040a] via-[#03040a]/70 to-transparent pointer-events-none"></div>                            
@@ -1914,6 +1920,19 @@
         function initScholarScene() {
 
             const container = document.getElementById("scholar3D");
+
+            // 🔥 STOP 3D RENDERING WHEN NOT VISIBLE
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        container.style.display = "none";
+                    } else {
+                        container.style.display = "block";
+                    }
+                });
+            });
+
+            observer.observe(container);
             if (!container) return;
 
             const scene = new THREE.Scene();
@@ -1932,7 +1951,7 @@
             });
 
             // SUPER IMPORTANT PERFORMANCE BOOST
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+            renderer.setPixelRatio(1);
 
             renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.shadowMap.enabled = false; // shadows are expensive & unused
@@ -1986,10 +2005,11 @@
                 }
                 last3DTime = time;
 
-                group.rotation.y += 0.004; // slightly smoother motion
+                group.rotation.y += 0.002; // slightly smoother motion
                 renderer.render(scene, camera);
 
                 requestAnimationFrame(animate3D);
+                if (document.hidden) return;
             }
             animate3D();
 
@@ -2355,6 +2375,14 @@
                 addMessage(text, "ai");
             }, 800);
         }
+
+        // 🔥 PAUSE CANVAS WHEN TAB IS HIDDEN
+        document.addEventListener("visibilitychange", () => {
+            if (!document.hidden) {
+                requestAnimationFrame(animateCanvas);
+            }
+        });
+
 
         window.onload = () => {
 
